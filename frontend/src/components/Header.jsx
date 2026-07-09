@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import "./Header.css";
 
@@ -6,6 +6,7 @@ function Header() {
   const location = useLocation();
   const navigate = useNavigate();
   const currentPath = location.pathname;
+  const [activeSection, setActiveSection] = useState("home");
 
   const isActive = (path) => currentPath === path;
 
@@ -26,6 +27,7 @@ function Header() {
 
   const handleNavClick = (event, sectionId) => {
     event.preventDefault();
+    setActiveSection(sectionId);
 
     if (currentPath !== "/") {
       navigate("/");
@@ -35,6 +37,45 @@ function Header() {
 
     scrollToSection(sectionId);
   };
+
+  useEffect(() => {
+    if (currentPath !== "/") {
+      setActiveSection("home");
+      return;
+    }
+
+    const updateActiveSection = () => {
+      const offset = 180;
+      const scrollPosition = window.scrollY + offset;
+      const sectionIds = ["home", "services", "about", "team", "contact"];
+      let currentId = "home";
+
+      sectionIds.forEach((sectionId) => {
+        const section = document.getElementById(sectionId);
+
+        if (section) {
+          const sectionTop = section.offsetTop;
+
+          if (scrollPosition >= sectionTop) {
+            currentId = sectionId;
+          }
+        }
+      });
+
+      setActiveSection(currentId);
+    };
+
+    updateActiveSection();
+    window.addEventListener("scroll", updateActiveSection, { passive: true });
+    window.addEventListener("resize", updateActiveSection);
+
+    return () => {
+      window.removeEventListener("scroll", updateActiveSection);
+      window.removeEventListener("resize", updateActiveSection);
+    };
+  }, [currentPath]);
+
+  const isSectionActive = (sectionId) => currentPath === "/" && activeSection === sectionId;
 
   return (
     <header className="shadow-sm sticky-top bg-white">
@@ -63,7 +104,7 @@ function Header() {
             <ul className="navbar-nav mx-auto gap-4">
               <li className="nav-item">
                 <Link
-                  className={`nav-link ${isActive("/") ? "active-link" : "text-secondary"}`}
+                  className={`nav-link ${isSectionActive("home") ? "active-link" : "text-secondary"}`}
                   to="/"
                   onClick={(event) => handleNavClick(event, "home")}
                 >
@@ -73,7 +114,7 @@ function Header() {
 
               <li className="nav-item">
                 <Link
-                  className="nav-link text-secondary"
+                  className={`nav-link ${isSectionActive("services") ? "active-link" : "text-secondary"}`}
                   to="/"
                   onClick={(event) => handleNavClick(event, "services")}
                 >
@@ -83,7 +124,7 @@ function Header() {
 
               <li className="nav-item">
                 <Link
-                  className="nav-link text-secondary"
+                  className={`nav-link ${isSectionActive("about") ? "active-link" : "text-secondary"}`}
                   to="/"
                   onClick={(event) => handleNavClick(event, "about")}
                 >
@@ -93,7 +134,7 @@ function Header() {
 
               <li className="nav-item">
                 <Link
-                  className="nav-link text-secondary"
+                  className={`nav-link ${isSectionActive("team") ? "active-link" : "text-secondary"}`}
                   to="/"
                   onClick={(event) => handleNavClick(event, "team")}
                 >
@@ -103,7 +144,7 @@ function Header() {
 
               <li className="nav-item">
                 <Link
-                  className="nav-link text-secondary"
+                  className={`nav-link ${isSectionActive("contact") ? "active-link" : "text-secondary"}`}
                   to="/"
                   onClick={(event) => handleNavClick(event, "contact")}
                 >
