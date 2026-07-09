@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import AOS from "aos";
 import Select from "react-select";
+import Swal from "sweetalert2";
+import axios from "axios";
 import "aos/dist/aos.css";
 import "./Home.css";
 
@@ -11,30 +13,123 @@ function Home() {
       className: "urgency-normal",
     });
 
-    const [countryCode, setCountryCode] = useState("+351");
-    const [phone, setPhone] = useState("");
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
-    const contactOptions = [
-    { value: "duvidas", label: "Esclarecimento de Dúvidas" },
-    { value: "consulta", label: "Consulta Geral" },
-    { value: "vacinacao", label: "Vacinação" },
-    { value: "desparasitacao", label: "Desparasitação" },
-    { value: "exames", label: "Exames e Diagnóstico" },
-    { value: "cirurgia", label: "Cirurgia" },
-    { value: "acompanhamento", label: "Acompanhamento" },
-  ];
+    const handleSubmit = async (e) => {
+      e.preventDefault();
 
-    const specieOptions = [
-    { value: "cao", label: "Cão" },
-    { value: "gato", label: "Gato" },
-    { value: "ave", label: "Ave" },
-    { value: "roedor", label: "Roedor" },
-    { value: "reptil", label: "Réptil" },
-    { value: "peixe", label: "Peixe" },
-    { value: "outro", label: "Outro" },
-  ];
+      const payload = {
+        nome_tutor: contactForm.nome_tutor,
+        email: contactForm.email,
+        telefone: contactForm.telefone,
+        indicativo_pais: contactForm.indicativo_pais,
+        nome_animal: contactForm.nome_animal,
+        mensagem: contactForm.mensagem,
+        id_species: selectedSpecies?.value ?? null,
+        id_breed: selectedBreed?.value ?? null,
+        id_contact_reason: selectedReason?.value ?? null,
+        id_user: null,
+      };
+
+      if (!payload.nome_tutor || !payload.email || !payload.telefone || !payload.indicativo_pais || !payload.mensagem) {
+        Swal.fire({
+          icon: "warning",
+          title: "Campos obrigatórios",
+          text: "Preencha pelo menos nome, email, telefone, indicativo e mensagem para enviar o formulário.",
+          confirmButtonText: "OK",
+          buttonsStyling: false,
+          customClass: {
+            popup: "vetlumen-swal-popup",
+            title: "vetlumen-swal-title",
+            htmlContainer: "vetlumen-swal-text",
+            confirmButton: "vetlumen-swal-button",
+          },
+        });
+        return;
+      }
+
+      try {
+        setIsSubmitting(true);
+
+        await axios.post("http://localhost:3000/api/contacts", payload);
+
+        Swal.fire({
+          icon: "success",
+          title: "Mensagem enviada!",
+          text: "Recebemos o seu pedido de contacto. Entraremos em contacto consigo brevemente.",
+          confirmButtonText: "OK",
+          buttonsStyling: false,
+          customClass: {
+            popup: "vetlumen-swal-popup",
+            title: "vetlumen-swal-title",
+            htmlContainer: "vetlumen-swal-text",
+            confirmButton: "vetlumen-swal-button",
+          },
+        });
+
+        setContactForm({
+          nome_tutor: "",
+          email: "",
+          telefone: "",
+          indicativo_pais: "+351",
+          nome_animal: "",
+          mensagem: "",
+        });
+        setSelectedSpecies(null);
+        setSelectedBreed(null);
+        setSelectedReason(null);
+      } catch (error) {
+        console.error("Erro ao enviar contacto:", error);
+
+        Swal.fire({
+          icon: "error",
+          title: "Erro ao enviar",
+          text: error.response?.data?.message || "Não foi possível enviar a sua mensagem. Tente novamente.",
+          confirmButtonText: "OK",
+          buttonsStyling: false,
+          customClass: {
+            popup: "vetlumen-swal-popup",
+            title: "vetlumen-swal-title",
+            htmlContainer: "vetlumen-swal-text",
+            confirmButton: "vetlumen-swal-button",
+          },
+        });
+      } finally {
+        setIsSubmitting(false);
+      }
+    };
+
+  const [countryCode, setCountryCode] = useState("+351");
+  const [phone, setPhone] = useState("");
+
+  const [contactOptions, setContactOptions] = useState([]);
+  const [selectedReason, setSelectedReason] = useState(null);
+
+  const [speciesOptions, setSpeciesOptions] = useState([]);
+  const [breedOptions, setBreedOptions] = useState([]);
+  
+  const [selectedSpecies, setSelectedSpecies] = useState(null);
+  const [selectedBreed, setSelectedBreed] = useState(null);
 
   const [isUrgencyHidden, setIsUrgencyHidden] = useState(false);
+
+  const [contactForm, setContactForm] = useState({
+    nome_tutor: "",
+    email: "",
+    telefone: "",
+    indicativo_pais: "+351",
+    nome_animal: "",
+    mensagem: ""
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+  
+    setContactForm(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
 
     useEffect(() => {
     AOS.init({
@@ -55,6 +150,92 @@ function Home() {
 
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  useEffect(() => {
+    const loadContactReasons = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:3000/api/contact-reasons"
+        );
+  
+        const options = response.data.map((reason) => ({
+          value: reason.id_contact_reason,
+          label: reason.nome,
+        }));
+  
+        setContactOptions(options);
+  
+      } catch (error) {
+        console.error("Erro ao carregar motivos:", error);
+      }
+    };
+  
+    loadContactReasons();
+  }, []);
+
+  useEffect(() => {
+
+    const loadSpecies = async () => {
+  
+      try {
+  
+        const response = await axios.get(
+          "http://localhost:3000/api/species"
+        );
+  
+        const options = response.data.map(specie => ({
+          value: specie.id_species,
+          label: specie.nome_especie
+        }));
+  
+        setSpeciesOptions(options);
+  
+      } catch (error) {
+  
+        console.error("Erro ao carregar espécies:", error);
+  
+      }
+  
+    };
+  
+    loadSpecies();
+  
+  }, []);
+
+  useEffect(() => {
+  
+    if (!selectedSpecies) {
+      setBreedOptions([]);
+      setSelectedBreed(null);
+      return;
+    }
+  
+    const loadBreeds = async () => {
+  
+      try {
+  
+        const response = await axios.get(
+          `http://localhost:3000/api/breeds/species/${selectedSpecies.value}`
+        );
+  
+        const options = response.data.map(breed => ({
+          value: breed.id_breed,
+          label: breed.nome_raca
+        }));
+  
+        setBreedOptions(options);
+  
+      } catch (error) {
+  
+        console.error("Erro ao carregar raças:", error);
+  
+      }
+  
+    };
+  
+    loadBreeds();
+  
+  }, [selectedSpecies]);
 
   useEffect(() => {
     const updateUrgency = () => {
@@ -80,6 +261,7 @@ function Home() {
         });
       }
     };
+    
 
     updateUrgency();
     const intervalId = window.setInterval(updateUrgency, 60000);
@@ -390,7 +572,7 @@ function Home() {
                 image: "https://plus.unsplash.com/premium_photo-1661963377525-7b879630b497?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
                 name: "Ana Rodrigues",
                 role: "Assistente Veterinária",
-                specialty: "Cuidados e acompanhamento"
+                specialty: "Assistência clínica e atendimento"
               }
               
             ].map((member, index) => (
@@ -514,25 +696,31 @@ function Home() {
               {/* Formulário */}
               <div className="col-lg-7" data-aos="fade-left" data-aos-delay="150">
         
-                <form className="contact-form">
+                <form className="contact-form" onSubmit={handleSubmit}>
         
         
                   <div className="row g-3">
         
                     <div className="col-md-6">
-                      <input 
-                        type="text"
-                        className="form-control"
-                        placeholder="Nome"
+                      <input
+                          type="text"
+                          name="nome_tutor"
+                          className="form-control"
+                          placeholder="Nome"
+                          value={contactForm.nome_tutor}
+                          onChange={handleChange}
                       />
                     </div>
         
         
                     <div className="col-md-6">
-                      <input 
-                        type="email"
-                        className="form-control"
-                        placeholder="Email"
+                      <input
+                          type="email"
+                          name="email"
+                          className="form-control"
+                          placeholder="Email"
+                          value={contactForm.email}
+                          onChange={handleChange}
                       />
                     </div>
         
@@ -541,24 +729,24 @@ function Home() {
                       <div className="input-group">
                     
                         <input
-                          type="tel"
-                          className="form-control country-code"
-                          value={countryCode}
-                          maxLength={5}
-                          onChange={(e) =>
-                            setCountryCode(e.target.value.replace(/[^\d+]/g, ""))
-                          }
-                          placeholder="+351"
+                            type="tel"
+                            className="form-control country-code"
+                            value={contactForm.indicativo_pais}
+                            onChange={(e)=>
+                              setContactForm(prev=>({
+                                ...prev,
+                                indicativo_pais:e.target.value
+                              }))
+                            }
                         />
                     
                         <input
-                          type="tel"
-                          className="form-control"
-                          placeholder="912345678"
-                          value={phone}
-                          onChange={(e) =>
-                            setPhone(e.target.value.replace(/\D/g, ""))
-                          }
+                            type="tel"
+                            name="telefone"
+                            className="form-control"
+                            placeholder="912345678"
+                            value={contactForm.telefone}
+                            onChange={handleChange}
                         />
                     
                       </div>
@@ -566,17 +754,22 @@ function Home() {
         
         
                     <div className="col-md-6">
-                      <input 
-                        type="text"
-                        className="form-control"
-                        placeholder="Nome do animal"
+                      <input
+                          type="text"
+                          name="nome_animal"
+                          className="form-control"
+                          placeholder="Nome do animal"
+                          value={contactForm.nome_animal}
+                          onChange={handleChange}
                       />
                     </div>
 
                     {/* Dropdown - Biblioteca (react-select) */}
                     <div className="col-12">
                       <Select
-                        options={specieOptions}
+                        options={speciesOptions}
+                        value={selectedSpecies}
+                        onChange={setSelectedSpecies}
                         placeholder="Espécie do animal"
                         maxMenuHeight={190}
                         className="contact-select"
@@ -585,10 +778,15 @@ function Home() {
                     </div>
 
                     <div className="col-md-12">
-                      <input 
-                        type="text"
-                        className="form-control"
+                      <Select
+                        options={breedOptions}
+                        value={selectedBreed}
+                        onChange={setSelectedBreed}
                         placeholder="Raça do animal"
+                        maxMenuHeight={190}
+                        isDisabled={!selectedSpecies}
+                        className="contact-select"
+                        classNamePrefix="contact-select"
                       />
                     </div>
 
@@ -596,6 +794,8 @@ function Home() {
                     <div className="col-12">
                       <Select
                         options={contactOptions}
+                        value={selectedReason}
+                        onChange={setSelectedReason}
                         placeholder="Motivo do contacto"
                         maxMenuHeight={190}
                         className="contact-select"
@@ -606,19 +806,26 @@ function Home() {
                     <div className="col-12">
         
                       <textarea
-                        className="form-control"
-                        rows="5"
-                        placeholder="Mensagem"
-                      ></textarea>
+                          name="mensagem"
+                          className="form-control"
+                          rows="5"
+                          placeholder="Mensagem"
+                          value={contactForm.mensagem}
+                          onChange={handleChange}
+                      />
         
                     </div>
         
         
                     <div className="col-12">
         
-                      <button className="btn btn-hero px-4 py-3 rounded-pill">
-                        <i className="bi bi-send me-2"></i>
-                        Enviar mensagem
+                      <button
+                        type="submit"
+                        className="btn btn-hero px-4 py-3 rounded-pill"
+                        disabled={isSubmitting}
+                      >
+                        <i className={`bi ${isSubmitting ? "bi-hourglass-split" : "bi-send"} me-2`}></i>
+                        {isSubmitting ? "A enviar..." : "Enviar mensagem"}
                       </button>
         
                     </div>

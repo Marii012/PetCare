@@ -3,10 +3,26 @@ const cors = require('cors');
 require('dotenv').config();
 
 const sequelize = require('./database/database-remote');
-const User = require('./models/userModel'); 
 
+// Modelos
+const User = require('./models/userModel');
+const Species = require('./models/speciesModel');
+const Breed = require('./models/breedModel');
+const ContactReason = require('./models/contactReasonModel');
+const Contact = require('./models/contactModel');
+
+
+// Associações
+require('./models/associations');
+
+
+// Rotas
 const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
+const speciesRoutes = require('./routes/speciesRoutes');
+const breedRoutes = require('./routes/breedRoutes');
+const contactReasonRoutes = require('./routes/contactReasonRoutes');
+const contactRoutes = require('./routes/contactRoutes');
 
 const app = express();
 
@@ -32,7 +48,16 @@ app.get('/', (req, res) => {
 });
 
 app.use('/api/auth', authRoutes);
+
 app.use('/api/users', userRoutes);
+
+app.use('/api/species', speciesRoutes);
+
+app.use('/api/breeds', breedRoutes);
+
+app.use('/api/contact-reasons', contactReasonRoutes);
+
+app.use('/api/contacts', contactRoutes);
 
 // ==========================================
 // TRATAMENTO DE ERROS (Apenas DEPOIS de tentar todas as rotas acima)
@@ -71,11 +96,10 @@ if (process.env.NODE_ENV !== 'test') {
       
       app.listen(PORT, () => {
         console.log(`🚀 Servidor backend a correr na porta ${PORT}`);
-        console.log(`🔗 Testar rotas em: http://localhost:${PORT}/api/auth/login`);
       });
     })
     .catch(err => {
-      console.error('❌ Erro fatal ao ligar à Base de Dados (Neon):', err);
+      console.error('❌ Erro ao ligar à Base de Dados (Neon):', err);
       process.exit(1); 
     });
 } else {

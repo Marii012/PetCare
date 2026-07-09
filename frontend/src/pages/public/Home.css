@@ -494,3 +494,45 @@
     border-color: #78cc28;
     box-shadow: 0 0 0 .2rem rgba(120,204,40,.15);
 }
+
+/* ================= SWEETALERT ================= */
+
+.vetlumen-swal-popup {
+    border-radius: 45px !important;
+    padding: 35px !important;
+    font-family: 'Poppins', sans-serif !important;
+}
+
+
+.vetlumen-swal-title {
+    font-weight: 700 !important;
+    color: #1f2937 !important;
+}
+
+
+.vetlumen-swal-text {
+    color: #6b7280 !important;
+    font-size: 15px !important;
+}
+
+
+.vetlumen-swal-button {
+    color: #ffffff !important;
+    border-radius: 25px !important;
+    background-color: #78cc28 !important;
+    padding: 12px 35px !important;
+    font-weight: 600 !important;
+}
+
+
+.vetlumen-swal-button:hover {
+    background-color: #64b31e !important;
+}
+
+.vetlumen-swal-button:focus,
+.vetlumen-swal-button:focus-visible,
+.vetlumen-swal-button:active {
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+}
