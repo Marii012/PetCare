@@ -189,22 +189,22 @@ function Header() {
 
 
           <div
-  className={`collapse navbar-collapse mobile-menu-panel ${isMenuOpen ? "show" : ""}`}
-  id="navbarMenu"
->
-
-  {user && (
-  <div className="mobile-user-info d-lg-none">
-
-    <i className="bi bi-person-circle"></i>
-
-    <div>
-      <h6>Olá, {user.first_name}</h6>
-      <span>Cliente</span>
-    </div>
-
-  </div>
-)}
+            className={`collapse navbar-collapse mobile-menu-panel ${isMenuOpen ? "show" : ""}`}
+            id="navbarMenu"
+          >
+          
+            {user && (
+            <div className="mobile-user-info d-lg-none">
+          
+              <i className="bi bi-person-fill"></i>
+          
+              <div>
+                <h6>Olá, {user.first_name}</h6>
+                <span>Cliente</span>
+              </div>
+          
+            </div>
+          )}
 
 
             <ul className="navbar-nav mx-auto gap-4">
@@ -286,7 +286,7 @@ function Header() {
           data-bs-toggle="dropdown"
           aria-expanded="false"
         >
-          <i className="bi bi-person-circle me-2"></i>
+          <i className="bi bi-person-fill me-2 fs-5"></i>
 
           Olá, {user.first_name}
 
@@ -302,24 +302,11 @@ function Header() {
 
             <Link
               className="dropdown-item"
-              to="/dashboard"
+              to="/client/dashboard"
             >
-              <i className="bi bi-speedometer2"></i>
+              <i className="bi bi-person-fill-gear fs-4"></i>
 
-              Dashboard
-            </Link>
-
-          </li>
-
-          <li>
-
-            <Link
-              className="dropdown-item"
-              to="/perfil"
-            >
-              <i className="bi bi-person"></i>
-
-              Perfil
+              Minha Conta
             </Link>
 
           </li>
@@ -334,7 +321,7 @@ function Header() {
               className="dropdown-item text-danger"
               onClick={handleLogout}
             >
-              <i className="bi bi-box-arrow-right"></i>
+              <i className="bi bi-box-arrow-right fs-4"></i>
 
               Sair
             </button>
@@ -352,23 +339,13 @@ function Header() {
         <hr />
 
         <Link
-          to="/dashboard"
+          to="/client/dashboard"
           className="mobile-user-link"
           onClick={closeMenu}
         >
-          <i className="bi bi-speedometer2"></i>
+          <i className="bi bi-person-fill-gear"></i>
 
-          Dashboard
-        </Link>
-
-        <Link
-          to="/perfil"
-          className="mobile-user-link"
-          onClick={closeMenu}
-        >
-          <i className="bi bi-person"></i>
-
-          Perfil
+          Minha Conta
         </Link>
 
         <button

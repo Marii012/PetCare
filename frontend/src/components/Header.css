@@ -286,14 +286,15 @@ header {
 ========================== */
 
 .dropdown-menu {
-  min-width: 280px;
-  padding: 0.6rem;
-  margin-top: 0.75rem !important;
+  min-width: 220px;   
+  padding: .4rem;
+
+  margin-top: 0.5rem !important;
 
   border: none;
-  border-radius: 30px;
+  border-radius: 16px;
 
-  background: #ffffff;
+  background: #fff;
 
   box-shadow:
     0 12px 40px rgba(0, 0, 0, 0.12),

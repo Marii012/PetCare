@@ -4,13 +4,17 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 
 import Home from "./pages/public/Home";
-import Login from "./pages/public/Login"; // ajusta o caminho
-import Register from "./pages/public/Register"; // ajusta o caminho
+import Login from "./pages/public/Login";
+import Register from "./pages/public/Register";
+
+import ClientLayout from "./layouts/ClientLayout";
+import Dashboard from "./pages/client/DashboardClient";
+import Pets from "./pages/client/Pets";
 
 function App() {
   const location = useLocation();
 
-  const hideLayout = ["/login", "/register"].includes(location.pathname);
+  const hideLayout = ["/login", "/register", "/client/dashboard", "/client/pets"  ].includes(location.pathname);
 
   return (
     <>
@@ -20,6 +24,12 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+
+        {/* Dashboard Cliente */}
+        <Route element={<ClientLayout />}>
+          <Route path="/client/dashboard" element={<Dashboard />} />
+          <Route path="/client/pets" element={<Pets />} />
+        </Route>
       </Routes>
 
       {!hideLayout && <Footer />}
