@@ -6,7 +6,7 @@ html, body {
   height: 100%;
   margin: 0;
   padding: 0;
-  background-color: #f1f5f9; /* Mesma cor de fundo do teu dashboard-container */
+  background-color: #ffffff; /* Mesma cor de fundo do teu dashboard-container */
 }
 
 * {
