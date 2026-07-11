@@ -222,7 +222,44 @@ html, body {
   font-size: 1.1rem;
   font-weight: 600;
   color: #0f172a;
-  margin-bottom: 20px;
+  margin-bottom: 0;
+}
+
+/* Ajuste para alinhar controles ao título do cartão */
+.card-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.card-title .chart-controls-inline {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.card-title .chart-controls-inline label {
+  font-size: 0.95rem;
+  color: #475569;
+  font-weight: 600;
+}
+
+.card-title .chart-controls-inline select {
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  color: #0f172a;
+  font-weight: 600;
+  box-shadow: 0 2px 6px rgba(2,6,23,0.04);
+  transition: all 0.18s ease;
+}
+
+.card-title .chart-controls-inline select:focus {
+  outline: none;
+  border-color: #78cc28;
+  box-shadow: 0 6px 18px rgba(120,204,40,0.12);
 }
 
 /* Gráfico de Barras */
@@ -232,6 +269,37 @@ html, body {
   justify-content: space-between;
   gap: 12px;
   height: 150px;
+}
+
+/* Controles do gráfico (filtro de ano) */
+.chart-controls {
+  width: 100%;
+  margin-bottom: 8px;
+}
+
+.chart-controls label {
+  font-size: 0.9rem;
+  color: #475569;
+  font-weight: 600;
+  margin-right: 6px;
+}
+
+.chart-controls select {
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  color: #0f172a;
+  font-weight: 600;
+  box-shadow: 0 2px 6px rgba(2,6,23,0.04);
+  transition: all 0.18s ease;
+  appearance: none; /* remove default arrow in some browsers */
+}
+
+.chart-controls select:focus {
+  outline: none;
+  border-color: #78cc28;
+  box-shadow: 0 6px 18px rgba(120,204,40,0.12);
 }
 
 .bar {

@@ -1,7 +1,141 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./DashboardClient.css";
+import api from "../../services/api";
 
 const Dashboard = () => {
+  const [pets, setPets] = useState([]);
+  const [appointments, setAppointments] = useState([]);
+  const [healthPercent, setHealthPercent] = useState(95);
+  const [chartData, setChartData] = useState(new Array(12).fill(0));
+  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+  const [availableYears, setAvailableYears] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const storedUser = JSON.parse(localStorage.getItem("user") || "null");
+        if (!storedUser) return;
+
+        const userId = storedUser.id_user;
+
+        const petsResp = await api.get(`/pets/user/${userId}`);
+        const petsData = petsResp.data || [];
+        setPets(petsData);
+
+        const apptResp = await api.get(`/appointments`);
+        const allAppointments = apptResp.data || [];
+
+        const petIds = petsData.map((p) => p.id_pet);
+        const userAppointments = allAppointments.filter((a) => petIds.includes(a.id_pet));
+        setAppointments(userAppointments);
+
+        // Próxima consulta (mais próxima no futuro)
+        const now = new Date();
+        const upcoming = userAppointments
+          .map((a) => ({
+            ...a,
+            datetime: new Date(`${a.data}T${a.hora || '00:00'}`)
+          }))
+          .filter((a) => a.datetime >= now)
+          .sort((x, y) => x.datetime - y.datetime);
+
+        if (upcoming.length > 0) {
+          setAppointments((prev) => prev); // manter
+        }
+
+        // calcular anos disponíveis a partir das consultas
+        const yearsSet = new Set();
+        userAppointments.forEach((a) => {
+          const d = new Date(a.data);
+          yearsSet.add(d.getFullYear());
+        });
+        const yearsArr = Array.from(yearsSet).sort((a,b) => b - a);
+        if (yearsArr.length === 0) {
+          // garantir pelo menos o ano atual
+          yearsArr.push(new Date().getFullYear());
+        }
+        setAvailableYears(yearsArr);
+        if (!yearsArr.includes(selectedYear)) {
+          setSelectedYear(yearsArr[0]);
+        }
+
+        // Saúde geral simples: percentagem de pets com registo médico (último ano)
+        try {
+          const nowYear = new Date().getFullYear();
+          let petsWithRecords = 0;
+          for (const p of petsData) {
+            const rec = await api.get(`/medical-records/pet/${p.id_pet}`);
+            if ((rec.data || []).length > 0) petsWithRecords += 1;
+          }
+          const health = petsData.length ? Math.round((petsWithRecords / petsData.length) * 100) : 95;
+          setHealthPercent(health);
+        } catch (err) {
+          // non-fatal: manter valor padrão
+        }
+
+      } catch (error) {
+        console.error('Erro ao carregar dashboard:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  // Dados derivados para render
+  const now = new Date();
+  const todayDisplay = `Hoje, ${now.toLocaleDateString('pt-PT', { day: 'numeric', month: 'long' })}`;
+
+  const upcomingAppts = appointments
+    .map((a) => ({ ...a, datetime: new Date(`${a.data}T${a.hora || '00:00'}`) }))
+    .filter((a) => a.datetime >= now)
+    .sort((x, y) => x.datetime - y.datetime);
+
+  const nextAppt = upcomingAppts.length ? upcomingAppts[0] : null;
+
+  const recentActivities = appointments
+    .map((a) => ({ ...a, datetime: new Date(`${a.data}T${a.hora || '00:00'}`) }))
+    .sort((x, y) => y.datetime - x.datetime)
+    .slice(0, 3);
+
+  const monthsLabels = ["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"];
+
+  const getPetById = (id) => pets.find((p) => p.id_pet === id);
+
+  const API_BASE = (import.meta.env.VITE_API_URL || "http://localhost:3000/api").replace(/\/api\/?$/i, "");
+
+  const getPetImageUrl = (fotografia) => {
+    if (!fotografia) return null;
+    if (fotografia.startsWith('http')) return fotografia;
+    if (fotografia.startsWith('/')) return `${API_BASE}${fotografia}`;
+    return `${API_BASE}/uploads/${fotografia}`;
+  };
+
+  const getAge = (dateStr) => {
+    if (!dateStr) return "-";
+    const d = new Date(dateStr);
+    const diff = new Date().getFullYear() - d.getFullYear();
+    return diff > 0 ? `${diff} anos` : "<1 ano";
+  };
+
+  // Recalcular barras por mês quando appointments ou selectedYear mudarem
+  useEffect(() => {
+    const counts = new Array(12).fill(0);
+    appointments.forEach((a) => {
+      try {
+        const d = new Date(a.data);
+        const y = d.getFullYear();
+        const m = d.getMonth();
+        if (y === Number(selectedYear) && m >= 0 && m < 12) counts[m] += 1;
+      } catch (err) {
+        // ignore
+      }
+    });
+
+    const max = Math.max(...counts, 1);
+    const perc = counts.map((v) => Math.round((v / max) * 100));
+    setChartData(perc);
+  }, [appointments, selectedYear]);
+
   return (
     <main className="dashboard-container">
 
@@ -15,7 +149,7 @@ const Dashboard = () => {
         </div>
 
         <div className="date-box">
-          <span>Hoje, 10 Julho</span>
+          <span>{todayDisplay}</span>
         </div>
       </header>
 
@@ -49,7 +183,6 @@ const Dashboard = () => {
       {/* Estatísticas */}
       <section className="stats-grid">
 
-
         <div className="stat-card">
 
           <div className="stat-icon">
@@ -57,7 +190,7 @@ const Dashboard = () => {
           </div>
 
           <div>
-            <h3>3</h3>
+            <h3>{pets.length || 0}</h3>
             <p>Animais</p>
           </div>
 
@@ -72,7 +205,7 @@ const Dashboard = () => {
           </div>
 
           <div>
-            <h3>2</h3>
+            <h3>{appointments.length || 0}</h3>
             <p>Consultas</p>
           </div>
 
@@ -87,7 +220,7 @@ const Dashboard = () => {
           </div>
 
           <div>
-            <h3>95%</h3>
+            <h3>{healthPercent}%</h3>
             <p>Saúde geral</p>
           </div>
 
@@ -109,41 +242,23 @@ const Dashboard = () => {
             <h3>
               Histórico de Consultas
             </h3>
+            <div className="chart-controls-inline">
+              <label>Ano:</label>
+              <select value={selectedYear} onChange={(e) => setSelectedYear(Number(e.target.value))}>
+                {availableYears.map((y) => (
+                  <option key={y} value={y}>{y}</option>
+                ))}
+              </select>
+            </div>
           </div>
 
-
           <div className="chart">
-
-            <div className="bar">
-              <span style={{height:"40%"}}></span>
-              <small>Jan</small>
-            </div>
-
-
-            <div className="bar">
-              <span style={{height:"70%"}}></span>
-              <small>Fev</small>
-            </div>
-
-
-            <div className="bar">
-              <span style={{height:"55%"}}></span>
-              <small>Mar</small>
-            </div>
-
-
-            <div className="bar">
-              <span style={{height:"90%"}}></span>
-              <small>Abr</small>
-            </div>
-
-
-            <div className="bar">
-              <span style={{height:"65%"}}></span>
-              <small>Mai</small>
-            </div>
-
-
+            {chartData.map((value, idx) => (
+              <div className="bar" key={idx}>
+                <span style={{ height: `${value}%` }}></span>
+                <small>{monthsLabels[idx] || `M${idx+1}`}</small>
+              </div>
+            ))}
           </div>
 
 
@@ -173,21 +288,18 @@ const Dashboard = () => {
 
 
             <div>
-
-              <h4>
-                Max
-              </h4>
-
-              <p>
-                Consulta de rotina
-              </p>
-
-
-              <span>
-                12 Maio • 15:30
-              </span>
-
-
+              {nextAppt ? (
+                <>
+                  <h4>{getPetById(nextAppt.id_pet)?.nome || 'Pet'}</h4>
+                  <p>{nextAppt.motivo || 'Consulta agendada'}</p>
+                  <span>{new Date(nextAppt.datetime).toLocaleString()}</span>
+                </>
+              ) : (
+                <>
+                  <h4>Sem consultas</h4>
+                  <p>Não há consultas agendadas.</p>
+                </>
+              )}
             </div>
 
 
@@ -221,50 +333,30 @@ const Dashboard = () => {
 
 
 
-          <div className="pet-row">
+          {pets.length === 0 && (
+            <div className="pet-row">Sem animais adicionados.</div>
+          )}
 
-            <div className="pet-avatar">
+          {pets.map((p) => (
+            <div className="pet-row" key={p.id_pet}>
+              <div className="pet-avatar">
+                {p.fotografia ? (
+                  <img
+                    src={getPetImageUrl(p.fotografia)}
+                    alt={p.nome}
+                    style={{ width: 56, height: 56, objectFit: 'cover', borderRadius: 8 }}
+                  />
+                ) : (
+                  <i className="bi bi-person-circle fs-2"></i>
+                )}
+              </div>
+              <div>
+                <strong>{p.nome}</strong>
+                <p>{p.porte || ''} • {getAge(p.data_nascimento)}</p>
+              </div>
+              <span className="status">{p.estado || 'Ativo'}</span>
             </div>
-
-            <div>
-              <strong>
-                Max
-              </strong>
-
-              <p>
-                Cão • 5 anos
-              </p>
-            </div>
-
-            <span className="status">
-              Saudável
-            </span>
-
-          </div>
-
-
-
-          <div className="pet-row">
-
-            <div className="pet-avatar">
-            </div>
-
-            <div>
-              <strong>
-                Luna
-              </strong>
-
-              <p>
-                Gato • 3 anos
-              </p>
-            </div>
-
-            <span className="status">
-              Saudável
-            </span>
-
-
-          </div>
+          ))}
 
 
 
@@ -286,45 +378,19 @@ const Dashboard = () => {
 
 
 
-          <div className="activity">
+          {recentActivities.length === 0 && (
+            <div className="activity">Sem atividade recente.</div>
+          )}
 
-            <i className="bi bi-check-circle-fill"></i>
-
-            <div>
-
-              <strong>
-                Consulta realizada
-              </strong>
-
-              <p>
-                Max foi consultado recentemente.
-              </p>
-
+          {recentActivities.map((a) => (
+            <div className="activity" key={a.id_appointment || `${a.id_pet}-${a.datetime}`}>
+              <i className="bi bi-check-circle-fill"></i>
+              <div>
+                <strong>{a.motivo || 'Consulta'}</strong>
+                <p>{getPetById(a.id_pet)?.nome || 'Pet'} • {new Date(a.datetime).toLocaleString()}</p>
+              </div>
             </div>
-
-
-          </div>
-
-
-
-          <div className="activity">
-
-            <i className="bi bi-capsule"></i>
-
-            <div>
-
-              <strong>
-                Medicação atualizada
-              </strong>
-
-              <p>
-                Novo registo adicionado.
-              </p>
-
-            </div>
-
-
-          </div>
+          ))}
 
 
         </section>

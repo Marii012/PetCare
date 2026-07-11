@@ -10,11 +10,20 @@ import Register from "./pages/public/Register";
 import ClientLayout from "./layouts/ClientLayout";
 import Dashboard from "./pages/client/DashboardClient";
 import Pets from "./pages/client/Pets";
+import Appointments from "./pages/client/Appointments";
+import MedicalRecord from "./pages/client/MedicalRecord";
+import Invoices from "./pages/client/Invoices";
+import PetVaccines from "./pages/client/PetVaccines";
+import PetHistory from "./pages/client/PetHistory";
+import PetDetails from "./pages/client/PetDetails";
 
 function App() {
   const location = useLocation();
 
-  const hideLayout = ["/login", "/register", "/client/dashboard", "/client/pets"  ].includes(location.pathname);
+  const hideLayout =
+  location.pathname.startsWith("/client") ||
+  location.pathname === "/login" ||
+  location.pathname === "/register";
 
   return (
     <>
@@ -29,6 +38,12 @@ function App() {
         <Route element={<ClientLayout />}>
           <Route path="/client/dashboard" element={<Dashboard />} />
           <Route path="/client/pets" element={<Pets />} />
+          <Route path="/client/appointments" element={<Appointments />} />
+          <Route path="/client/medical-records" element={<MedicalRecord />} />
+          <Route path="/client/invoices" element={<Invoices />} />
+          <Route path="/client/pets/:id" element={<PetDetails />} />
+          <Route path="/client/pets/:id/history" element={<PetHistory />} />
+          <Route path="/client/pets/:id/vaccines" element={<PetVaccines />} />
         </Route>
       </Routes>
 

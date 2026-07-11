@@ -1,0 +1,496 @@
+/* ==========================================================================
+   PET VACCINES
+========================================================================== */
+
+
+.vaccines-container{
+
+    margin-left:270px;
+
+    min-height:100vh;
+
+    padding:40px;
+
+    background:#f1f5f9;
+
+    font-family:'Poppins',sans-serif;
+
+    color:#1e293b;
+
+}
+
+
+
+/* ==========================================================================
+   HEADER
+========================================================================== */
+
+
+.vaccines-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:flex-start;
+
+    gap:20px;
+
+    margin-bottom:35px;
+
+}
+
+
+
+.vaccines-header h1{
+
+    margin:0 0 6px;
+
+    font-size:1.8rem;
+
+    font-weight:700;
+
+    color:#0f172a;
+
+}
+
+
+
+.vaccines-header p{
+
+    margin:0;
+
+    color:#64748b;
+
+    font-size:.95rem;
+
+}
+
+
+
+/* ==========================================================================
+   BOTÃO ADICIONAR
+========================================================================== */
+
+
+.add-vaccine-btn{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    padding:13px 24px;
+
+    border:none;
+
+    border-radius:14px;
+
+    background:#78cc28;
+
+    color:white;
+
+    font-weight:600;
+
+    font-size:.95rem;
+
+    cursor:pointer;
+
+    transition:.25s;
+
+}
+
+
+
+.add-vaccine-btn:hover{
+
+    background:#63b51f;
+
+    transform:translateY(-2px);
+
+    box-shadow:0 10px 22px rgba(120,204,40,.25);
+
+}
+
+
+
+/* ==========================================================================
+   LISTA
+========================================================================== */
+
+
+.vaccines-list{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:22px;
+
+}
+
+
+
+/* ==========================================================================
+   CARD VACINA
+========================================================================== */
+
+
+.vaccine-card{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:25px;
+
+    background:white;
+
+    border:1px solid #e2e8f0;
+
+    border-radius:20px;
+
+    padding:28px;
+
+    box-shadow:0 4px 12px rgba(15,23,42,.04);
+
+    transition:.3s;
+
+}
+
+
+
+.vaccine-card:hover{
+
+    transform:translateY(-4px);
+
+    box-shadow:0 16px 35px rgba(15,23,42,.08);
+
+}
+
+
+
+/* ==========================================================================
+   ÍCONE
+========================================================================== */
+
+
+.vaccine-icon{
+
+    width:70px;
+
+    height:70px;
+
+    flex-shrink:0;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    border-radius:18px;
+
+    background:#eef8e5;
+
+    color:#78cc28;
+
+    font-size:2rem;
+
+    transition:.3s;
+
+}
+
+
+
+.vaccine-card:hover .vaccine-icon{
+
+    background:#78cc28;
+
+    color:white;
+
+}
+
+
+
+/* ==========================================================================
+   INFORMAÇÃO
+========================================================================== */
+
+
+.vaccine-info{
+
+    flex:1;
+
+}
+
+
+
+.vaccine-info h3{
+
+    margin:0 0 12px;
+
+    font-size:1.25rem;
+
+    font-weight:700;
+
+    color:#0f172a;
+
+}
+
+
+
+.vaccine-info p{
+
+    margin:6px 0;
+
+    color:#64748b;
+
+    font-size:.95rem;
+
+}
+
+
+
+.vaccine-info strong{
+
+    color:#334155;
+
+}
+
+
+
+/* ==========================================================================
+   BOTÕES
+========================================================================== */
+
+
+.edit-vaccine-btn,
+.delete-vaccine-btn{
+
+
+    width:42px;
+
+    height:42px;
+
+    border-radius:12px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    cursor:pointer;
+
+    transition:.25s;
+
+    font-size:1rem;
+
+}
+
+
+
+/* EDITAR */
+
+
+.edit-vaccine-btn{
+
+    border:1px solid #dbeafe;
+
+    background:#eff6ff;
+
+    color:#2563eb;
+
+}
+
+
+
+.edit-vaccine-btn:hover{
+
+    background:#2563eb;
+
+    color:white;
+
+}
+
+
+
+/* APAGAR */
+
+
+.delete-vaccine-btn{
+
+    border:1px solid #fecaca;
+
+    background:#fff1f2;
+
+    color:#dc2626;
+
+}
+
+
+
+.delete-vaccine-btn:hover{
+
+    background:#dc2626;
+
+    color:white;
+
+}
+
+
+
+/* ==========================================================================
+   ANIMAÇÃO
+========================================================================== */
+
+
+.vaccine-card{
+
+    animation:fadeVaccine .35s ease;
+
+}
+
+
+
+@keyframes fadeVaccine{
+
+
+from{
+
+    opacity:0;
+
+    transform:translateY(15px);
+
+}
+
+
+to{
+
+    opacity:1;
+
+    transform:translateY(0);
+
+}
+
+
+}
+
+
+
+/* ==========================================================================
+   SCROLLBAR
+========================================================================== */
+
+
+.vaccines-container::-webkit-scrollbar{
+
+    width:10px;
+
+}
+
+
+.vaccines-container::-webkit-scrollbar-thumb{
+
+    background:#d5dee8;
+
+    border-radius:999px;
+
+}
+
+
+.vaccines-container::-webkit-scrollbar-thumb:hover{
+
+    background:#b9c7d8;
+
+}
+
+
+
+/* ==========================================================================
+   TABLET
+========================================================================== */
+
+
+@media(max-width:992px){
+
+
+.vaccines-container{
+
+    margin-left:0;
+
+    padding:30px;
+
+}
+
+
+
+.vaccines-header{
+
+    flex-direction:column;
+
+}
+
+
+
+.add-vaccine-btn{
+
+    width:100%;
+
+    justify-content:center;
+
+}
+
+
+}
+
+
+
+/* ==========================================================================
+   MOBILE
+========================================================================== */
+
+
+@media(max-width:600px){
+
+
+.vaccines-container{
+
+    padding:20px;
+
+}
+
+
+
+.vaccine-card{
+
+    flex-direction:column;
+
+    align-items:flex-start;
+
+}
+
+
+
+.vaccine-icon{
+
+    width:60px;
+
+    height:60px;
+
+}
+
+
+
+.edit-vaccine-btn,
+.delete-vaccine-btn{
+
+    width:100%;
+
+}
+
+
+
+}

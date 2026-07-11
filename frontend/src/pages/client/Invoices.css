@@ -1,0 +1,438 @@
+.invoices-container{
+
+margin-left:270px;
+
+padding:40px;
+
+background:#f1f5f9;
+
+min-height:100vh;
+
+font-family:'Poppins',sans-serif;
+
+}
+
+
+
+/* HEADER */
+
+.invoices-header{
+
+margin-bottom:35px;
+
+}
+
+
+.invoices-header h1{
+
+font-size:2rem;
+
+font-weight:700;
+
+margin-bottom:6px;
+
+}
+
+
+.invoices-header p{
+
+color:#64748b;
+
+}
+
+
+
+/* STATS */
+
+
+.invoice-stats{
+
+display:grid;
+
+grid-template-columns:repeat(3,1fr);
+
+gap:20px;
+
+margin-bottom:30px;
+
+}
+
+
+
+.invoice-stat{
+
+background:white;
+
+padding:22px;
+
+border-radius:20px;
+
+display:flex;
+
+align-items:center;
+
+gap:18px;
+
+box-shadow:0 10px 25px rgba(0,0,0,.05);
+
+}
+
+
+
+.invoice-stat i{
+
+font-size:1.8rem;
+
+color:#78cc28;
+
+}
+
+
+
+.invoice-stat h3{
+
+margin:0;
+
+font-size:1.6rem;
+
+}
+
+
+
+.invoice-stat p{
+
+margin:0;
+
+color:#64748b;
+
+}
+
+
+
+/* FILTROS */
+
+
+.invoices-filters{
+	display:flex;
+	gap:16px;
+	margin-bottom:30px;
+	align-items:center;
+	flex-wrap:wrap;
+}
+
+.invoice-search-input{
+	flex:1;
+	min-width:260px;
+	height:52px;
+	border:1px solid #e2e8f0;
+	border-radius:18px;
+	padding:0 18px;
+	font-size:0.95rem;
+	color:#334155;
+	background:#fff;
+	outline:none;
+	box-shadow:0 8px 20px rgba(15, 23, 42, 0.04);
+}
+
+.invoice-search-input:focus{
+	border-color:#78cc28;
+	box-shadow:0 0 0 3px rgba(120, 204, 40, 0.15);
+}
+
+
+
+/* LISTA */
+
+
+.invoice-list{
+
+display:flex;
+
+flex-direction:column;
+
+gap:18px;
+
+}
+
+
+
+/* CARD */
+
+
+.invoice-card{
+
+background:white;
+
+padding:22px;
+
+border-radius:22px;
+
+display:flex;
+
+align-items:center;
+
+gap:20px;
+
+box-shadow:0 10px 25px rgba(0,0,0,.05);
+
+}
+
+
+
+.invoice-icon{
+
+width:55px;
+
+height:55px;
+
+border-radius:16px;
+
+background:#ecfccb;
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+}
+
+
+
+.invoice-icon i{
+
+font-size:1.5rem;
+
+color:#78cc28;
+
+}
+
+
+
+.invoice-info{
+
+flex:1;
+
+}
+
+
+
+.invoice-info h3{
+
+margin-bottom:8px;
+
+}
+
+
+
+.invoice-info p{
+
+color:#64748b;
+
+margin:0;
+
+}
+
+
+
+.invoice-items{
+
+display:flex;
+
+gap:8px;
+
+margin-top:12px;
+
+}
+
+
+
+.invoice-items span{
+
+background:#f1f5f9;
+
+padding:6px 12px;
+
+border-radius:20px;
+
+font-size:.8rem;
+
+}
+
+
+
+/* DIREITA */
+
+
+.invoice-right{
+
+display:flex;
+
+flex-direction:column;
+
+align-items:flex-end;
+
+gap:10px;
+
+}
+
+
+
+.invoice-right strong{
+
+font-size:1.2rem;
+
+}
+
+
+
+.invoice-status{
+
+padding:6px 14px;
+
+border-radius:20px;
+
+font-size:.8rem;
+
+font-weight:600;
+
+}
+
+
+
+.paid{
+
+background:#dcfce7;
+
+color:#16a34a;
+
+}
+
+
+
+.pending{
+
+background:#fef9c3;
+
+color:#ca8a04;
+
+}
+
+
+
+.cancelled{
+
+background:#fee2e2;
+
+color:#dc2626;
+
+}
+
+
+
+/* BOTÃO */
+
+
+.details-btn{
+
+border:none;
+
+background:#f8fafc;
+
+padding:10px 15px;
+
+border-radius:12px;
+
+cursor:pointer;
+
+transition:.25s;
+
+}
+
+
+
+.details-btn:hover{
+
+background:#eaf8de;
+
+color:#78cc28;
+
+}
+
+
+
+/* SELECT */
+
+.invoice-select__control{
+	height:52px!important;
+	border-radius:18px!important;
+	border:1px solid #e2e8f0!important;
+	box-shadow:none!important;
+	min-width:220px;
+	background:#fff;
+}
+
+.invoice-select__control:hover{
+	border-color:#78cc28!important;
+}
+
+.invoice-select__control--is-focused{
+	border-color:#78cc28!important;
+	box-shadow:0 0 0 3px rgba(120, 204, 40, 0.15)!important;
+}
+
+.invoice-select__indicator-separator{
+	display:none;
+}
+
+.invoice-select__menu{
+	border-radius:18px!important;
+	overflow:hidden;
+	margin-top:6px;
+}
+
+.invoice-select__option--is-focused{
+	background:#f5f5f5!important;
+}
+
+.invoice-select__option--is-selected{
+	background:#78cc28!important;
+	color:#fff!important;
+}
+
+/* Reuse search-box styles from Appointments for consistent search UI */
+.search-box{
+	flex:1;
+	display:flex;
+	align-items:center;
+	gap:12px;
+	height:54px;
+	padding:0 18px;
+	background:#fff;
+	border:1px solid #e2e8f0;
+	border-radius:16px;
+	transition:.25s;
+}
+
+.search-box:focus-within{
+	border-color:#78cc28;
+	box-shadow:0 0 0 4px rgba(120,204,40,0.12);
+}
+
+.search-box i{
+	color:#94a3b8;
+	font-size:1rem;
+}
+
+.search-box input{
+	flex:1;
+	border:none;
+	outline:none;
+	background:transparent;
+	color:#1e293b;
+	font-size:.95rem;
+}
+
+.search-box input::placeholder{
+	color:#94a3b8;
+}

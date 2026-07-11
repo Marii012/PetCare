@@ -1,0 +1,303 @@
+/* ==========================================================================
+   PET DETAILS CONTAINER
+========================================================================== */
+
+.pet-details-container {
+    margin-left: 270px;
+    min-height: 100vh;
+    padding: 40px;
+    font-family: 'Poppins', sans-serif;
+    color: #1e293b;
+    animation: fadeDetails .4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ==========================================================================
+   BOTÃO VOLTAR
+========================================================================== */
+
+.back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 35px;
+    padding: 12px 24px;
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    background: #ffffff;
+    color: #64748b;
+    font-weight: 600;
+    font-size: .95rem;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(15, 23, 42, .02);
+    transition: all .25s ease;
+}
+
+.back-btn i {
+    font-size: 1rem;
+    transition: transform .2s ease;
+}
+
+.back-btn:hover {
+    background: #78cc28;
+    color: #ffffff;
+    border-color: #78cc28;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(120, 204, 40, .25);
+}
+
+.back-btn:hover i {
+    transform: translateX(-3px);
+}
+
+/* ==========================================================================
+   HEADER DO ANIMAL (Destaque para Imagem)
+========================================================================== */
+
+.pet-details-header {
+    display: flex;
+    align-items: center;
+    gap: 40px; /* Mais espaço entre imagem e texto */
+    background: #ffffff;
+    padding: 40px;
+    border-radius: 24px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, .04);
+    margin-bottom: 35px;
+}
+
+/* Imagem Maior e com Maior Destaque */
+.pet-details-image {
+    width: 200px; 
+    height: 180px;
+    object-fit: cover;
+    border-radius: 28px;
+    transition: transform .3s ease;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, .04);
+}
+
+.pet-details-header:hover .pet-details-image {
+    transform: scale(1.03) rotate(1deg);
+}
+
+.pet-details-info {
+    flex: 1;
+}
+
+.pet-details-header h1 {
+    margin: 0 0 6px;
+    font-size: 2.5rem; /* Nome do pet com mais presença */
+    font-weight: 800;
+    color: #0f172a;
+    letter-spacing: -0.02em;
+}
+
+.pet-details-header p {
+    margin: 0 0 16px;
+    color: #64748b;
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+
+.pet-details-header span {
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 20px;
+    border-radius: 999px;
+    background: #eef8e5;
+    color: #5ea91d;
+    font-size: .85rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+}
+
+/* ==========================================================================
+   CONTEÚDO E CARDS
+========================================================================== */
+
+.pet-details-content {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.details-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 24px;
+    padding: 35px;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, .03);
+    transition: all .3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.details-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px rgba(15, 23, 42, .06);
+    border-color: #cbd5e1;
+}
+
+.details-card h2 {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin: 0 0 28px;
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.details-card h2 i {
+    color: #78cc28;
+    font-size: 1.5rem;
+    background: #eef8e5;
+    padding: 10px;
+    border-radius: 12px;
+}
+
+/* ==========================================================================
+   GRID DE INFORMAÇÃO
+========================================================================== */
+
+.details-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+}
+
+.details-grid div {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    padding: 20px;
+    border-radius: 18px;
+    transition: all .2s ease;
+}
+
+.details-grid div:hover {
+    background: #ffffff;
+    border-color: #78cc28;
+    box-shadow: 0 4px 12px rgba(120, 204, 40, .05);
+}
+
+.details-grid strong {
+    display: block;
+    margin-bottom: 10px;
+    font-size: .8rem;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    font-weight: 600;
+}
+
+.details-grid p {
+    margin: 0;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: #1e293b;
+}
+
+/* ==========================================================================
+   OBSERVAÇÕES
+========================================================================== */
+
+.details-card > p {
+    margin: 0;
+    padding: 20px;
+    background: #f8fafc;
+    border-radius: 18px;
+    border: 1px solid #e2e8f0;
+    color: #475569;
+    line-height: 1.7;
+    font-size: 1rem;
+}
+
+/* ==========================================================================
+   ANIMAÇÃO
+========================================================================== */
+
+@keyframes fadeDetails {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ==========================================================================
+   SCROLLBAR
+========================================================================== */
+
+.pet-details-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+.pet-details-container::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 999px;
+}
+
+.pet-details-container::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+
+/* ==========================================================================
+   RESPONSIVIDADE (Breakpoints Ajustados para a Nova Imagem)
+========================================================================== */
+
+@media (max-width: 1200px) {
+    .details-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 992px) {
+    .pet-details-container {
+        margin-left: 0;
+        padding: 30px;
+    }
+
+    .pet-details-header {
+        flex-direction: column;
+        align-items: center; /* Centraliza no tablet/mobile para melhor design */
+        text-align: center;
+        gap: 25px;
+        padding: 35px;
+    }
+
+    .pet-details-header h1 {
+        font-size: 2.2rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .details-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .pet-details-container {
+        padding: 16px;
+    }
+
+    .pet-details-header {
+        padding: 25px;
+    }
+
+    .pet-details-image {
+        width: 140px; /* Reduz ligeiramente em ecrãs muito pequenos */
+        height: 140px;
+        border-width: 4px;
+    }
+
+    .pet-details-header h1 {
+        font-size: 1.8rem;
+    }
+
+    .details-card {
+        padding: 24px;
+    }
+}

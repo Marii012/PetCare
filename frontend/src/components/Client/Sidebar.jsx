@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../../services/api";
 import "./Sidebar.css";
 
 const Sidebar = () => {
@@ -18,15 +18,23 @@ const Sidebar = () => {
 
   const handleLogout = async () => {
     try {
-      await axios.post("/api/auth/logout");
+      // Use api instance so Authorization header is enviado
+      await api.post("/auth/logout");
 
       // Limpar dados da sessão
       localStorage.removeItem("token");
       localStorage.removeItem("user");
 
+      // Redirect to login
       navigate("/login");
+      // full reload to reset app state
+      window.location.reload();
     } catch (error) {
       console.error("Erro ao terminar sessão:", error);
+      // fallback: limpar e redirecionar
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      navigate("/login");
     }
   };
 
@@ -49,52 +57,64 @@ const Sidebar = () => {
         {/* Menu */}
         <nav className="nav flex-column gap-2">
           <NavLink
-            to="/client/dashboard"
-            className={({ isActive }) =>
-              `custom-nav-link d-flex align-items-center ${
-                isActive ? "active" : ""
-              }`
-            }
-          >
-            <i className="bi bi-grid-1x2-fill me-3"></i>
-            Dashboard
-          </NavLink>
+  to="/client/dashboard"
+  className={({ isActive }) =>
+    `custom-nav-link d-flex align-items-center ${
+      isActive ? "active" : ""
+    }`
+  }
+>
+  <i className="bi bi-grid-1x2-fill me-3"></i>
+  Dashboard
+</NavLink>
 
-          <NavLink
-            to="/client/appointments"
-            className={({ isActive }) =>
-              `custom-nav-link d-flex align-items-center ${
-                isActive ? "active" : ""
-              }`
-            }
-          >
-            <i className="bi bi-calendar-event me-3"></i>
-            Consultas
-          </NavLink>
+<NavLink
+  to="/client/pets"
+  className={({ isActive }) =>
+    `custom-nav-link d-flex align-items-center ${
+      isActive ? "active" : ""
+    }`
+  }
+>
+  <i className="bi bi-heart me-3"></i>
+  Os Meus Animais
+</NavLink>
 
-          <NavLink
-            to="/client/pets"
-            className={({ isActive }) =>
-              `custom-nav-link d-flex align-items-center ${
-                isActive ? "active" : ""
-              }`
-            }
-          >
-            <i className="bi bi-heart me-3"></i>
-            Os Meus Animais
-          </NavLink>
+<NavLink
+  to="/client/appointments"
+  className={({ isActive }) =>
+    `custom-nav-link d-flex align-items-center ${
+      isActive ? "active" : ""
+    }`
+  }
+>
+  <i className="bi bi-calendar-event me-3"></i>
+  Consultas
+</NavLink>
 
-          <NavLink
-            to="/client/profile"
-            className={({ isActive }) =>
-              `custom-nav-link d-flex align-items-center ${
-                isActive ? "active" : ""
-              }`
-            }
-          >
-            <i className="bi bi-person me-3"></i>
-            Perfil
-          </NavLink>
+<NavLink
+  to="/client/invoices"
+  className={({ isActive }) =>
+    `custom-nav-link d-flex align-items-center ${
+      isActive ? "active" : ""
+    }`
+  }
+>
+  <i className="bi bi-receipt me-3"></i>
+  Faturas
+</NavLink>
+
+<NavLink
+  to="/client/profile"
+  className={({ isActive }) =>
+    `custom-nav-link d-flex align-items-center ${
+      isActive ? "active" : ""
+    }`
+  }
+>
+  <i className="bi bi-person me-3"></i>
+  Perfil
+</NavLink>
         </nav>
       </div>
 

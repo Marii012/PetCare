@@ -10,7 +10,14 @@ const Species = require('./models/speciesModel');
 const Breed = require('./models/breedModel');
 const ContactReason = require('./models/contactReasonModel');
 const Contact = require('./models/contactModel');
-
+const Pet = require('./models/petModel');
+const Vaccine = require('./models/vaccinesModel');
+const MedicalRecord = require('./models/medicalRecordModel');
+const Appointment = require('./models/appointmentModel');
+const Service = require('./models/serviceModel');
+const Role = require('./models/roleModel');
+const Product = require('./models/productModel');
+const Invoice = require('./models/invoiceModel');
 
 // Associações
 require('./models/associations');
@@ -23,6 +30,14 @@ const speciesRoutes = require('./routes/speciesRoutes');
 const breedRoutes = require('./routes/breedRoutes');
 const contactReasonRoutes = require('./routes/contactReasonRoutes');
 const contactRoutes = require('./routes/contactRoutes');
+const petRoutes = require('./routes/petRoutes');
+const vaccineRoutes = require('./routes/vaccinesRoutes');
+const medicalRecordRoutes = require('./routes/medicalRecordRoutes');
+const appointmentRoutes = require('./routes/appointmentRoutes');
+const serviceRoutes = require('./routes/serviceRoutes');
+const roleRoutes = require('./routes/roleRoutes');
+const productRoutes = require('./routes/productRoutes');
+const invoiceRoutes = require('./routes/invoiceRoutes');
 
 const app = express();
 
@@ -58,6 +73,22 @@ app.use('/api/breeds', breedRoutes);
 app.use('/api/contact-reasons', contactReasonRoutes);
 
 app.use('/api/contacts', contactRoutes);
+
+app.use('/api/pets', petRoutes);
+
+app.use('/api/vaccines', vaccineRoutes);
+
+app.use('/api/medical-records', medicalRecordRoutes);
+
+app.use('/api/appointments', appointmentRoutes);
+
+app.use('/api/services', serviceRoutes);
+
+app.use('/api/roles', roleRoutes);
+
+app.use('/api/products', productRoutes);
+
+app.use('/api/invoices', invoiceRoutes);
 
 // ==========================================
 // TRATAMENTO DE ERROS (Apenas DEPOIS de tentar todas as rotas acima)
