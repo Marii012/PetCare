@@ -16,6 +16,7 @@ import Invoices from "./pages/client/Invoices";
 import PetVaccines from "./pages/client/PetVaccines";
 import PetHistory from "./pages/client/PetHistory";
 import PetDetails from "./pages/client/PetDetails";
+import Profile from "./pages/client/Profile";
 
 function App() {
   const location = useLocation();
@@ -44,6 +45,7 @@ function App() {
           <Route path="/client/pets/:id" element={<PetDetails />} />
           <Route path="/client/pets/:id/history" element={<PetHistory />} />
           <Route path="/client/pets/:id/vaccines" element={<PetVaccines />} />
+          <Route path="/client/profile" element={<Profile />} />
         </Route>
       </Routes>
 
