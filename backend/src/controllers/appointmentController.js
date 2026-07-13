@@ -4,6 +4,24 @@ const User = require('../models/userModel');
 const Service = require('../models/serviceModel');
 
 
+const allowedAppointmentStatuses = ['Pendente', 'Confirmada', 'Concluída', 'Cancelada'];
+
+const normalizeAppointmentStatus = (status) => {
+  if (!status) {
+    return 'Pendente';
+  }
+
+  const normalizedStatus = String(status).trim();
+
+  if (normalizedStatus === 'Rejeitada') {
+    return 'Cancelada';
+  }
+
+  return allowedAppointmentStatuses.includes(normalizedStatus)
+    ? normalizedStatus
+    : 'Pendente';
+};
+
 const appointmentController = {
 
 
@@ -248,19 +266,27 @@ const appointmentController = {
         duracao_real
       } = req.body;
 
+      if (data !== undefined) appointment.data = data;
+      if (hora !== undefined) appointment.hora = hora;
+      if (motivo !== undefined) appointment.motivo = motivo;
+      if (estado !== undefined) appointment.estado = normalizeAppointmentStatus(estado);
+      if (observacoes !== undefined) appointment.observacoes = observacoes;
+      if (preco_final !== undefined) appointment.preco_final = preco_final;
+      if (motivo_cancelamento !== undefined) appointment.motivo_cancelamento = motivo_cancelamento;
+      if (data_confirmacao !== undefined) appointment.data_confirmacao = data_confirmacao;
+      if (duracao_real !== undefined) appointment.duracao_real = duracao_real;
 
+      if (!appointment.data) {
+        appointment.data = new Date().toISOString().slice(0, 10);
+      }
 
-      if (data) appointment.data = data;
-      if (hora) appointment.hora = hora;
-      if (motivo) appointment.motivo = motivo;
-      if (estado) appointment.estado = estado;
-      if (observacoes) appointment.observacoes = observacoes;
-      if (preco_final) appointment.preco_final = preco_final;
-      if (motivo_cancelamento) appointment.motivo_cancelamento = motivo_cancelamento;
-      if (data_confirmacao) appointment.data_confirmacao = data_confirmacao;
-      if (duracao_real) appointment.duracao_real = duracao_real;
+      if (!appointment.hora) {
+        appointment.hora = '00:00:00';
+      }
 
-
+      if (!appointment.motivo) {
+        appointment.motivo = 'Consulta';
+      }
 
       await appointment.save();
 

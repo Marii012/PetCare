@@ -11,12 +11,15 @@ import ClientLayout from "./layouts/ClientLayout";
 import Dashboard from "./pages/client/DashboardClient";
 import Pets from "./pages/client/Pets";
 import Appointments from "./pages/client/Appointments";
+import BookAppointment from "./pages/client/BookAppointment";
 import MedicalRecord from "./pages/client/MedicalRecord";
 import Invoices from "./pages/client/Invoices";
 import PetVaccines from "./pages/client/PetVaccines";
 import PetHistory from "./pages/client/PetHistory";
 import PetDetails from "./pages/client/PetDetails";
 import Profile from "./pages/client/Profile";
+import AddPetPage from "./pages/client/AddPetPage";
+import EditPetPage from "./pages/client/EditPetPage";
 
 function App() {
   const location = useLocation();
@@ -39,7 +42,10 @@ function App() {
         <Route element={<ClientLayout />}>
           <Route path="/client/dashboard" element={<Dashboard />} />
           <Route path="/client/pets" element={<Pets />} />
+          <Route path="/client/pets/add" element={<AddPetPage />} />
+          <Route path="/client/pets/:id/edit" element={<EditPetPage />} />
           <Route path="/client/appointments" element={<Appointments />} />
+          <Route path="/client/appointments/book" element={<BookAppointment />} />
           <Route path="/client/medical-records" element={<MedicalRecord />} />
           <Route path="/client/invoices" element={<Invoices />} />
           <Route path="/client/pets/:id" element={<PetDetails />} />

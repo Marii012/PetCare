@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import AOS from "aos";
 import Select from "react-select";
 import Swal from "sweetalert2";
@@ -7,6 +8,7 @@ import "aos/dist/aos.css";
 import "./Home.css";
 
 function Home() {
+  const navigate = useNavigate();
     const [urgencyInfo, setUrgencyInfo] = useState({
       label: "Atendimento disponível",
       icon: "bi-heart-pulse",
@@ -292,7 +294,7 @@ function Home() {
               <p className="text-muted mb-4 lead font-light fs-6">
                 Marque consultas veterinárias de forma simples, rápida e segura. A nossa equipa está preparada para cuidar da saúde e do bem-estar do seu melhor amigo!
               </p>
-              <button className="btn btn-hero btn-lg px-4 py-2.5 rounded-pill text-white fw-medium shadow-sm">
+              <button className="btn btn-hero btn-lg px-4 py-2.5 rounded-pill text-white fw-medium shadow-sm" onClick={() => navigate("/client/appointments/book")}>
                 <i className="bi bi-calendar-plus me-2"></i>
                 Marcar Consulta
               </button>

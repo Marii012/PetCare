@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./DashboardClient.css";
 import api from "../../services/api";
 
 const Dashboard = () => {
+  const navigate = useNavigate();
   const [pets, setPets] = useState([]);
   const [appointments, setAppointments] = useState([]);
   const [healthPercent, setHealthPercent] = useState(95);
@@ -169,7 +171,7 @@ const Dashboard = () => {
           </p>
 
 
-          <button className="dashboard-btn">
+          <button className="dashboard-btn" onClick={() => navigate("/client/appointments/book")}>
             <i className="bi bi-calendar-event"></i>
             Marcar Consulta
           </button>

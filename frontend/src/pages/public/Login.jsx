@@ -41,29 +41,22 @@ function Login() {
 
 
 
-  const handleSubmit = async (e) => {
-  
+ const handleSubmit = async (e) => {
+
     e.preventDefault();
-  
   
     try {
   
       const response = await login(formData);
   
-  
       // Guardar JWT
-      localStorage.setItem(
-        "token",
-        response.token
-      );
-      
-      
-      // Guardar dados do utilizador
-      localStorage.setItem(
-        "user",
-        JSON.stringify(response.user)
-      );
+      localStorage.setItem("token", response.token);
   
+      // Guardar dados do utilizador
+      localStorage.setItem("user", JSON.stringify(response.user));
+  
+      // Guardar a role (opcional, mas útil)
+      localStorage.setItem("role", response.user.id_role);
   
       Swal.fire({
         title: "Login efetuado!",
@@ -79,17 +72,31 @@ function Login() {
         }
       }).then(() => {
   
-        navigate("/");
+        switch (response.user.id_role) {
+  
+          case 1: 
+            navigate("/client/dashboard");
+            break;
+  
+          case 2: 
+            navigate("/veterinarian/dashboard");
+            break;
+  
+          case 3: 
+            navigate("/admin/dashboard");
+            break;
+  
+          default:
+            navigate("/");
+            break;
+  
+        }
   
       });
   
-  
-  
     } catch (error) {
   
-  
       console.error(error);
-  
   
       Swal.fire({
         title: "Erro!",
@@ -105,7 +112,6 @@ function Login() {
           confirmButton: "vetlumen-swal-button"
         }
       });
-  
   
     }
   

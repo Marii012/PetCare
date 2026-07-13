@@ -146,6 +146,64 @@ const authController = {
         message: 'Ocorreu um erro ao tentar efetuar o login.'
       });
     }
+  },
+
+  changePassword: async (req, res) => {
+    try {
+      const { currentPassword, newPassword, confirmPassword, userId } = req.body;
+
+      if (!userId || !currentPassword || !newPassword || !confirmPassword) {
+        return res.status(400).json({
+          error: 'Dados incompletos.',
+          message: 'Preencha todos os campos para alterar a palavra-passe.'
+        });
+      }
+
+      if (newPassword !== confirmPassword) {
+        return res.status(400).json({
+          error: 'Palavra-passe inválida.',
+          message: 'A nova palavra-passe e a confirmação não coincidem.'
+        });
+      }
+
+      if (newPassword.length < 6) {
+        return res.status(400).json({
+          error: 'Palavra-passe fraca.',
+          message: 'A nova palavra-passe deve ter pelo menos 6 caracteres.'
+        });
+      }
+
+      const user = await User.findByPk(userId);
+      if (!user) {
+        return res.status(404).json({
+          error: 'Utilizador não encontrado.',
+          message: 'Não foi possível encontrar o utilizador.'
+        });
+      }
+
+      const isCurrentPasswordValid = await bcrypt.compare(currentPassword, user.password);
+      if (!isCurrentPasswordValid) {
+        return res.status(401).json({
+          error: 'Palavra-passe atual incorreta.',
+          message: 'A palavra-passe atual está incorreta.'
+        });
+      }
+
+      const saltRounds = 10;
+      const passwordHash = await bcrypt.hash(newPassword, saltRounds);
+      user.password = passwordHash;
+      await user.save();
+
+      return res.status(200).json({
+        message: 'Palavra-passe alterada com sucesso!'
+      });
+    } catch (error) {
+      console.error('Erro ao alterar palavra-passe:', error);
+      return res.status(500).json({
+        error: 'Erro interno do servidor.',
+        message: 'Não foi possível alterar a palavra-passe.'
+      });
+    }
   }
 };
 

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { createRoot } from "react-dom/client";
 import "./Pets.css";
 import Select from "react-select";
 import { useNavigate } from "react-router-dom";
@@ -14,183 +13,6 @@ const swalCustomClass = {
   htmlContainer: "vetlumen-swal-text",
   confirmButton: "vetlumen-swal-button",
   cancelButton: "vetlumen-swal-button"
-};
-
-const PetFormModalContent = ({ pet, speciesOptions, onStateChange }) => {
-  const speciesChoices = (speciesOptions || []).filter((option) => option.value !== "all");
-  const initialSpecies =
-    speciesChoices.find((option) => Number(pet?.id_species) === option.value) || null;
-
-  const [formData, setFormData] = useState({
-    name: pet?.nome || "",
-    sex: pet?.sexo || "",
-    birth: pet?.data_nascimento
-      ? new Date(pet.data_nascimento).toISOString().split("T")[0]
-      : "",
-    weight: pet?.peso ?? "",
-    color: pet?.cor || "",
-    state: pet?.estado || "Ativo",
-    photoFile: null
-  });
-  const [selectedSpecies, setSelectedSpecies] = useState(initialSpecies);
-  const [selectedBreed, setSelectedBreed] = useState(null);
-  const [breedOptions, setBreedOptions] = useState([]);
-
-  useEffect(() => {
-    const loadBreeds = async () => {
-      if (!selectedSpecies?.value) {
-        setBreedOptions([]);
-        setSelectedBreed(null);
-        onStateChange({ ...formData, species: selectedSpecies, breed: null });
-        return;
-      }
-
-      try {
-        const response = await api.get(`/breeds/species/${selectedSpecies.value}`);
-        const options = (response.data || []).map((breed) => ({
-          value: breed.id_breed,
-          label: breed.nome_raca
-        }));
-
-        setBreedOptions(options);
-
-        const matchedBreed = options.find((option) => Number(pet?.id_breed) === option.value) || null;
-        setSelectedBreed(matchedBreed);
-        onStateChange({ ...formData, species: selectedSpecies, breed: matchedBreed });
-      } catch (error) {
-        setBreedOptions([]);
-        setSelectedBreed(null);
-        onStateChange({ ...formData, species: selectedSpecies, breed: null });
-      }
-    };
-
-    loadBreeds();
-  }, [selectedSpecies]);
-
-  useEffect(() => {
-    onStateChange({
-      ...formData,
-      species: selectedSpecies,
-      breed: selectedBreed
-    });
-  }, [formData, selectedSpecies, selectedBreed]);
-
-  const handleInputChange = (event) => {
-    const { name, value } = event.target;
-    setFormData((current) => ({ ...current, [name]: value }));
-  };
-
-  return (
-    <div className="pet-swal-form">
-      <label>
-        <span>Nome</span>
-        <input
-          name="name"
-          className="pet-swal-input"
-          value={formData.name}
-          onChange={handleInputChange}
-        />
-      </label>
-
-      <div className="pet-swal-row">
-        <label>
-          <span>Espécie</span>
-          <Select
-            className="pet-swal-select"
-            classNamePrefix="pet-swal-select"
-            options={speciesChoices}
-            value={selectedSpecies}
-            onChange={setSelectedSpecies}
-            isSearchable={false}
-            placeholder="Selecione a espécie"
-          />
-        </label>
-
-        <label>
-          <span>Raça</span>
-          <Select
-            className="pet-swal-select"
-            classNamePrefix="pet-swal-select"
-            options={breedOptions}
-            value={selectedBreed}
-            onChange={setSelectedBreed}
-            isSearchable={false}
-            placeholder="Selecione a raça"
-            isDisabled={!selectedSpecies}
-          />
-        </label>
-      </div>
-
-      <div className="pet-swal-row">
-        <label>
-          <span>Sexo</span>
-          <input
-            name="sex"
-            className="pet-swal-input"
-            value={formData.sex}
-            onChange={handleInputChange}
-          />
-        </label>
-
-        <label>
-          <span>Data de nascimento</span>
-          <input
-            name="birth"
-            type="date"
-            className="pet-swal-input"
-            value={formData.birth}
-            onChange={handleInputChange}
-          />
-        </label>
-      </div>
-
-      <div className="pet-swal-row">
-        <label>
-          <span>Peso (kg)</span>
-          <input
-            name="weight"
-            type="number"
-            step="0.1"
-            className="pet-swal-input"
-            value={formData.weight}
-            onChange={handleInputChange}
-          />
-        </label>
-
-        <label>
-          <span>Cor</span>
-          <input
-            name="color"
-            className="pet-swal-input"
-            value={formData.color}
-            onChange={handleInputChange}
-          />
-        </label>
-      </div>
-
-      <label>
-        <span>Estado</span>
-        <input
-          name="state"
-          className="pet-swal-input"
-          value={formData.state}
-          onChange={handleInputChange}
-        />
-      </label>
-
-      <label>
-        <span>Foto do animal</span>
-        <input
-          type="file"
-          accept="image/*"
-          className="pet-swal-input"
-          onChange={(event) =>
-            setFormData((current) => ({ ...current, photoFile: event.target.files?.[0] || null }))
-          }
-        />
-      </label>
-    </div>
-  );
 };
 
 const getSpeciesLabel = (idSpecies, speciesOptions) => {
@@ -232,7 +54,6 @@ const Pets = () => {
   const [error, setError] = useState("");
   const [search, setSearch] = useState("");
   const [speciesOptions, setSpeciesOptions] = useState(baseSpeciesOptions);
-  const [breedsOptions, setBreedsOptions] = useState([]);
   const [speciesFilter, setSpeciesFilter] = useState(baseSpeciesOptions[0]);
 
   const fetchData = async () => {
@@ -258,7 +79,6 @@ const Pets = () => {
       setSpeciesOptions([{ value: "all", label: "Todas as espécies" }, ...speciesFromApi]);
       setSpeciesFilter({ value: "all", label: "Todas as espécies" });
       setPets(petsResponse.data || []);
-      setBreedsOptions([]);
     } catch (err) {
       setError(err.response?.data?.message || "Não foi possível carregar os animais.");
     } finally {
@@ -270,121 +90,12 @@ const Pets = () => {
     fetchData();
   }, []);
 
-  const loadBreeds = async (speciesId) => {
-    if (!speciesId) {
-      setBreedsOptions([]);
-      return;
-    }
-
-    try {
-      const response = await api.get(`/breeds/species/${speciesId}`);
-      const breedsFromApi = (response.data || []).map((breed) => ({
-        value: breed.id_breed,
-        label: breed.nome_raca
-      }));
-      setBreedsOptions(breedsFromApi);
-    } catch (err) {
-      setBreedsOptions([]);
-    }
+  const handleCreatePet = () => {
+    navigate("/client/pets/add");
   };
 
-  const handlePetSubmit = async (mode, pet = null) => {
-    const isEdit = mode === "edit";
-    const storedUser = JSON.parse(localStorage.getItem("user") || "null");
-    const userId = storedUser?.id_user;
-
-    let formState = {
-      name: pet?.nome || "",
-      species: null,
-      breed: null,
-      sex: pet?.sexo || "",
-      birth: pet?.data_nascimento ? new Date(pet.data_nascimento).toISOString().split("T")[0] : "",
-      weight: pet?.peso ?? "",
-      color: pet?.cor || "",
-      state: pet?.estado || "Ativo",
-      photoFile: null
-    };
-
-    const result = await Swal.fire({
-      title: isEdit ? "Editar animal" : "Adicionar animal",
-      html: `<div id="pet-swal-root"></div>`,
-      showCancelButton: true,
-      confirmButtonText: isEdit ? "Guardar" : "Adicionar",
-      cancelButtonText: "Cancelar",
-      customClass: swalCustomClass,
-      didOpen: () => {
-        const rootElement = document.getElementById("pet-swal-root");
-        if (rootElement) {
-          const root = createRoot(rootElement);
-          root.render(
-            <PetFormModalContent
-              pet={pet}
-              speciesOptions={speciesOptions}
-              onStateChange={(nextState) => {
-                formState = nextState;
-              }}
-            />
-          );
-        }
-      },
-      preConfirm: async () => {
-        if (!formState.name.trim() || !formState.species?.value) {
-          Swal.showValidationMessage("Nome e espécie são obrigatórios.");
-          return false;
-        }
-
-        let fotografia = pet?.fotografia || "";
-        if (formState.photoFile) {
-          fotografia = await new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.onloadend = () => resolve(reader.result);
-            reader.onerror = reject;
-            reader.readAsDataURL(formState.photoFile);
-          });
-        }
-
-        return {
-          nome: formState.name.trim(),
-          id_species: Number(formState.species.value),
-          id_breed: formState.breed?.value ? Number(formState.breed.value) : null,
-          sexo: formState.sex || null,
-          data_nascimento: formState.birth || null,
-          peso: formState.weight ? Number(formState.weight) : null,
-          cor: formState.color || null,
-          estado: formState.state || "Ativo",
-          fotografia,
-          id_user: userId
-        };
-      }
-    });
-
-    if (!result.isConfirmed || !result.value) {
-      return;
-    }
-
-    try {
-      if (isEdit && pet?.id_pet) {
-        await api.put(`/pets/${pet.id_pet}`, result.value);
-      } else {
-        await api.post("/pets", result.value);
-      }
-
-      await Swal.fire({
-        title: isEdit ? "Animal atualizado" : "Animal adicionado",
-        text: isEdit ? "As alterações foram guardadas com sucesso." : "O animal foi criado com sucesso.",
-        icon: "success",
-        customClass: swalCustomClass
-      });
-
-      fetchData();
-    } catch (err) {
-      Swal.fire({
-        title: "Erro",
-        text: err.response?.data?.message || "Não foi possível guardar o animal.",
-        icon: "error",
-        customClass: swalCustomClass
-      });
-    }
+  const handleEditPet = (petId) => {
+    navigate(`/client/pets/${petId}/edit`);
   };
 
   const handleDeletePet = async (pet) => {
@@ -436,7 +147,7 @@ const Pets = () => {
           <p>Consulta e gere toda a informação dos teus animais.</p>
         </div>
 
-        <button className="add-pet-btn" onClick={() => handlePetSubmit("create")}>
+        <button className="add-pet-btn" onClick={handleCreatePet}>
           <i className="bi bi-plus-circle"></i>
           Adicionar Animal
         </button>
@@ -512,7 +223,7 @@ const Pets = () => {
                   <i className="bi bi-capsule"></i>
                 </button>
 
-                <button className="edit-btn" onClick={() => handlePetSubmit("edit", pet)}>
+                <button className="edit-btn" onClick={() => handleEditPet(pet.id_pet)}>
                   <i className="bi bi-pencil-square"></i>
                 </button>
 

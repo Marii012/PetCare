@@ -250,6 +250,8 @@
 
     font-size:.95rem;
 
+    line-height:1.4;
+
 }
 
 .search-box input::placeholder{
@@ -263,11 +265,14 @@
 ========================================================================== */
 
 .appointment-select__control {
-    min-height: 52px !important;
-    border: 1px solid #e5e7eb !important;
-    border-radius: 18px !important;
+    min-height: 54px !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 16px !important;
     box-shadow: none !important;
-    transition: .2s;
+    transition: .25s;
+    padding: 0 14px !important;
+    font-size: 0.95rem !important;
+    line-height: 1.4 !important;
 }
 
 .appointment-select__control:hover {
@@ -310,13 +315,14 @@
     color: #fff !important;
 }
 
-.appointment-select__placeholder {
+.appointment-select__placeholder,
+.appointment-select__single-value,
+.appointment-select__input-container,
+.appointment-select__input,
+.appointment-select__input input {
+    font-size: 0.95rem !important;
+    color: #334155 !important;
     font-weight: 500 !important;
-    color: #6c757d;
-}
-
-.appointment-select__single-value {
-    color: #212529;
 }
 
 .vetlumen-swal-popup {
@@ -386,6 +392,7 @@
     border-radius: 12px;
     padding: 10px 12px;
     font-size: 0.95rem;
+    line-height: 1.4;
     color: #0f172a;
     background: #fff;
 }
@@ -410,13 +417,19 @@
 
     min-height:54px !important;
 
-    border:1px solid #e2e8f0 !important;
+    border:1px solid #e5e7eb !important;
 
-    border-radius:16px !important;
+    border-radius:18px !important;
 
     box-shadow:none !important;
 
     transition:.25s;
+
+    padding:0 14px !important;
+
+    font-size:.95rem !important;
+
+    line-height:1.4 !important;
 
 }
 
@@ -430,7 +443,7 @@
 
     border-color:#78cc28 !important;
 
-    box-shadow:0 0 0 4px rgba(120,204,40,.12)!important;
+    box-shadow:0 0 0 .2rem rgba(120,204,40,.15)!important;
 
 }
 
@@ -456,11 +469,11 @@
 
     border:none !important;
 
-    border-radius:16px !important;
+    border-radius:18px !important;
 
     overflow:hidden;
 
-    margin-top:8px !important;
+    margin-top:6px !important;
 
     box-shadow:
     0 12px 40px rgba(0,0,0,.12),
@@ -474,6 +487,16 @@
 
 }
 
+.appointments-select__placeholder,
+.appointments-select__single-value,
+.appointments-select__input-container,
+.appointments-select__input,
+.appointments-select__input input {
+    font-size: 0.95rem !important;
+    color: #334155 !important;
+    font-weight: 500 !important;
+}
+
 .appointments-select__option{
 
     border-radius:12px;
@@ -484,9 +507,9 @@
 
 .appointments-select__option--is-focused{
 
-    background:#f5fbfa !important;
+    background:#f5f5f5 !important;
 
-    color:#78cc28 !important;
+    color:#333 !important;
 
 }
 
@@ -506,6 +529,141 @@
     display:flex;
     flex-direction:column;
     gap:22px;
+}
+
+/* ==========================================================================
+   FORMULÁRIO DE MARCAÇÃO
+========================================================================== */
+
+.appointment-booking-form {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(280px, 1fr));
+    gap: 18px 22px;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 18px;
+    padding: 26px;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.04);
+}
+
+.appointment-booking-form .profile-item {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 0;
+}
+
+.appointment-booking-form .profile-item label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #334155;
+}
+
+.appointment-booking-form .profile-input {
+    width: 100%;
+    min-height: 46px;
+    border: 1px solid #cbd5e1;
+    border-radius: 12px;
+    padding: 10px 12px;
+    font-size: 0.95rem;
+    color: #0f172a;
+    background: #fff;
+    transition: border-color .2s ease, box-shadow .2s ease;
+}
+
+.appointment-booking-form .profile-input:focus {
+    outline: none;
+    border-color: #78cc28;
+    box-shadow: 0 0 0 3px rgba(120, 204, 40, 0.14);
+}
+
+.appointment-booking-form .pet-form-select__control {
+    min-height: 48px !important;
+    border: 1px solid #cbd5e1 !important;
+    border-radius: 12px !important;
+    box-shadow: none !important;
+}
+
+.appointment-booking-form .pet-form-select__control:hover {
+    border-color: #78cc28 !important;
+}
+
+.appointment-booking-form .pet-form-select__control--is-focused {
+    border-color: #78cc28 !important;
+    box-shadow: 0 0 0 3px rgba(120, 204, 40, 0.14) !important;
+}
+
+.appointment-booking-form .pet-form-select__placeholder,
+.appointment-booking-form .pet-form-select__single-value {
+    color: #334155 !important;
+    font-size: 0.95rem !important;
+}
+
+.appointment-booking-form .pet-form-select__menu {
+    border-radius: 14px !important;
+}
+
+.appointment-booking-form .pet-form-select__option--is-selected {
+    background: #78cc28 !important;
+}
+
+.appointment-booking-form .appointment-vet-field {
+    grid-column: 1;
+}
+
+.appointment-booking-form .appointment-inline-row {
+    grid-column: 2;
+    display: grid;
+    grid-template-columns: 1fr 140px;
+    gap: 12px;
+    align-items: end;
+}
+
+.appointment-booking-form .appointment-inline-row .profile-item {
+    min-width: 0;
+}
+
+.appointment-booking-form .full-width {
+    grid-column: 1 / -1;
+}
+
+.appointment-booking-form .profile-edit-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 4px;
+}
+
+.appointment-booking-form .profile-error {
+    grid-column: 1 / -1;
+    margin: 0;
+    color: #dc2626;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+@media (max-width: 980px) {
+    .appointment-booking-form {
+        grid-template-columns: 1fr;
+    }
+
+    .appointment-booking-form .appointment-vet-field,
+    .appointment-booking-form .appointment-inline-row,
+    .appointment-booking-form .full-width {
+        grid-column: 1;
+    }
+
+    .appointment-booking-form .appointment-inline-row {
+        grid-template-columns: 1fr;
+    }
+
+    .appointment-booking-form .profile-edit-actions {
+        justify-content: stretch;
+    }
+
+    .appointment-booking-form .profile-edit-actions button {
+        flex: 1;
+    }
 }
 
 /* ==========================================================================
@@ -564,8 +722,8 @@
 
 .appointment-avatar{
 
-    width:70px;
-    height:70px;
+    width:100px;
+    height:100px;
 
     flex-shrink:0;
 
@@ -574,11 +732,7 @@
     display:flex;
     justify-content:center;
     align-items:center;
-
-    background:#eef8e5;
-
-    color:#78cc28;
-
+    
     font-size:1.9rem;
 
     transition:.3s;
@@ -597,8 +751,6 @@
 .appointment-item:hover .appointment-avatar{
 
     transform:scale(1.05);
-
-    background:#78cc28;
 
     color:white;
 

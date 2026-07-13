@@ -39,6 +39,18 @@ const User = sequelize.define('User', {
     type: DataTypes.INTEGER,
     allowNull: false,
     field: 'id_role'
+  },
+
+  telefone: {
+    type: DataTypes.STRING(20),
+    allowNull: true,
+    field: 'telefone'
+  },
+
+  created_at: {
+    type: DataTypes.DATE,
+    allowNull: false,
+    field: 'created_at'
   }
 
 }, {

@@ -47,7 +47,7 @@ const userController = {
   updateUser: async (req, res) => {
     try {
       const { id } = req.params;
-      const { first_name, last_name, email, id_role } = req.body;
+      const { first_name, last_name, email, telefone, id_role } = req.body;
 
       // Verificar se o utilizador existe
       const user = await User.findByPk(id);
@@ -70,6 +70,7 @@ const userController = {
       user.first_name = first_name || user.first_name;
       user.last_name = last_name || user.last_name;
       user.email = email || user.email;
+      user.telefone = telefone !== undefined ? telefone : user.telefone;
       
       // Apenas o admin deveria mudar a role, mas o teu backend validará isso com middlewares mais tarde
       if (id_role) user.id_role = id_role; 
@@ -83,6 +84,8 @@ const userController = {
           first_name: user.first_name,
           last_name: user.last_name,
           email: user.email,
+          telefone: user.telefone,
+          created_at: user.created_at,
           id_role: user.id_role
         }
       });

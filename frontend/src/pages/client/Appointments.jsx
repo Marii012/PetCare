@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { createRoot } from "react-dom/client";
+import { useNavigate } from "react-router-dom";
 import Select from "react-select";
 import Swal from "sweetalert2";
 import api from "../../services/api";
@@ -10,7 +10,7 @@ const options = [
   { value: "Pendente", label: "Pendente" },
   { value: "Confirmada", label: "Confirmada" },
   { value: "Concluída", label: "Concluída" },
-  { value: "Rejeitada", label: "Rejeitada" },
+  { value: "Cancelada", label: "Cancelada" },
 ];
 
 const swalCustomClass = {
@@ -19,25 +19,6 @@ const swalCustomClass = {
   htmlContainer: "vetlumen-swal-text",
   confirmButton: "vetlumen-swal-button",
   cancelButton: "vetlumen-swal-button"
-};
-
-const AppointmentSelectField = ({ options, placeholder, onChange }) => {
-  const [selectedValue, setSelectedValue] = useState(null);
-
-  return (
-    <Select
-      className="appointment-select"
-      classNamePrefix="appointment-select"
-      options={options}
-      value={selectedValue}
-      onChange={(option) => {
-        setSelectedValue(option);
-        onChange?.(option);
-      }}
-      placeholder={placeholder}
-      isSearchable={false}
-    />
-  );
 };
 
 const formatDate = (value) => {
@@ -60,9 +41,8 @@ const formatTime = (value) => {
 };
 
 const Appointments = () => {
+  const navigate = useNavigate();
   const [appointments, setAppointments] = useState([]);
-  const [services, setServices] = useState([]);
-  const [pets, setPets] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [search, setSearch] = useState("");
@@ -78,32 +58,6 @@ const Appointments = () => {
   };
 
   useEffect(() => {
-
-    const loadServices = async () => {
-      try {
-        const response = await api.get("/services");
-        setServices(response.data || []);
-      } catch (err) {
-        setServices([]);
-      }
-    };
-
-    const loadPets = async () => {
-      try {
-        const storedUser = JSON.parse(localStorage.getItem("user") || "null");
-        const userId = storedUser?.id_user;
-
-        if (!userId) {
-          setPets([]);
-          return;
-        }
-
-        const response = await api.get(`/pets/user/${userId}`);
-        setPets(response.data || []);
-      } catch (err) {
-        setPets([]);
-      }
-    };
 
     const loadAppointments = async () => {
       try {
@@ -148,8 +102,6 @@ const Appointments = () => {
       }
     };
 
-    loadServices();
-    loadPets();
     loadAppointments();
   }, []);
 
@@ -173,7 +125,7 @@ const Appointments = () => {
         return "badge-pending";
       case "Concluída":
         return "badge-completed";
-      case "Rejeitada":
+      case "Cancelada":
         return "badge-rejected";
       default:
         return "";
@@ -207,7 +159,7 @@ const Appointments = () => {
       icon: "warning",
       showCancelButton: true,
       confirmButtonText: "Sim, cancelar",
-      cancelButtonText: "Voltar",
+      cancelButtonText: "Não",
       customClass: swalCustomClass
     });
 
@@ -217,11 +169,15 @@ const Appointments = () => {
 
     try {
       await api.put(`/appointments/${appointment.id_appointment}`, {
-        estado: "Rejeitada",
+        data: appointment.data || null,
+        hora: appointment.hora || null,
+        motivo: appointment.motivo || appointment.serviceName || "Consulta",
+        estado: "Cancelada",
+        observacoes: appointment.observations || null,
         motivo_cancelamento: "Cancelada pelo utilizador"
       });
 
-      await Swal.fire({
+      Swal.fire({
         title: "Consulta cancelada",
         text: "A consulta foi atualizada com sucesso.",
         icon: "success",
@@ -261,155 +217,7 @@ const Appointments = () => {
     } catch (err) {
       Swal.fire({
         title: "Erro",
-        text: err.response?.data?.message || "Não foi possível cancelar a consulta.",
-        icon: "error",
-        customClass: swalCustomClass
-      });
-    }
-  };
-
-  const handleCreateAppointment = async () => {
-    let petSelection = null;
-    let serviceSelection = null;
-
-    const petOptions = (pets || []).map((pet) => ({ value: pet.id_pet, label: pet.nome }));
-    const serviceOptions = (services || []).map((service) => ({ value: service.id_service, label: service.nome }));
-
-    const { value } = await Swal.fire({
-      title: "Marcar consulta",
-      html: `
-        <div class="appointment-swal-form">
-          <label>
-            <span>Animal</span>
-            <div id="appointment-pet-wrapper"></div>
-          </label>
-          <label>
-            <span>Serviço</span>
-            <div id="appointment-service-wrapper"></div>
-          </label>
-          <label>
-            <span>Data</span>
-            <input id="appointment-date" type="date" class="pet-swal-input" />
-          </label>
-          <label>
-            <span>Hora</span>
-            <input id="appointment-time" type="time" class="pet-swal-input" />
-          </label>
-          <label>
-            <span>Observações</span>
-            <textarea id="appointment-notes" class="pet-swal-input" rows="3" placeholder="Informações adicionais"></textarea>
-          </label>
-        </div>
-      `,
-      showCancelButton: true,
-      confirmButtonText: "Guardar",
-      cancelButtonText: "Cancelar",
-      customClass: swalCustomClass,
-      didOpen: () => {
-        const petWrapper = document.getElementById("appointment-pet-wrapper");
-        const serviceWrapper = document.getElementById("appointment-service-wrapper");
-
-        if (petWrapper) {
-          const petSelect = document.createElement("div");
-          petWrapper.appendChild(petSelect);
-          const petRoot = createRoot(petSelect);
-          petRoot.render(
-            <AppointmentSelectField
-              options={petOptions}
-              placeholder="Selecione um animal"
-              onChange={(option) => {
-                petSelection = option;
-              }}
-            />
-          );
-        }
-
-        if (serviceWrapper) {
-          const serviceSelect = document.createElement("div");
-          serviceWrapper.appendChild(serviceSelect);
-          const serviceRoot = createRoot(serviceSelect);
-          serviceRoot.render(
-            <AppointmentSelectField
-              options={serviceOptions}
-              placeholder="Selecione um serviço"
-              onChange={(option) => {
-                serviceSelection = option;
-              }}
-            />
-          );
-        }
-      },
-      preConfirm: () => {
-        const petId = petSelection?.value;
-        const serviceId = serviceSelection?.value;
-        const date = document.getElementById("appointment-date")?.value;
-        const time = document.getElementById("appointment-time")?.value;
-        const notes = document.getElementById("appointment-notes")?.value.trim();
-
-        if (!petId || !serviceId || !date || !time) {
-          Swal.showValidationMessage("Animal, serviço, data e hora são obrigatórios.");
-          return false;
-        }
-
-        return { petId, serviceId, date, time, notes };
-      }
-    });
-
-    if (!value) {
-      return;
-    }
-
-    try {
-      await api.post("/appointments", {
-        data: value.date,
-        hora: value.time,
-        motivo: value.petId,
-        observacoes: value.notes || null,
-        id_pet: Number(value.petId),
-        id_veterinario: 1,
-        id_service: Number(value.serviceId)
-      });
-
-      await Swal.fire({
-        title: "Consulta marcada",
-        text: "A consulta foi criada com sucesso.",
-        icon: "success",
-        customClass: swalCustomClass
-      });
-
-      const response = await api.get("/appointments");
-      const appointmentsData = response.data || [];
-      const enrichedAppointments = await Promise.all(
-        appointmentsData.map(async (item) => {
-          const [petResult, serviceResult, vetResult] = await Promise.allSettled([
-            item.id_pet ? api.get(`/pets/${item.id_pet}`) : Promise.resolve({ status: "fulfilled", value: { data: null } }),
-            item.id_service ? api.get(`/services/${item.id_service}`) : Promise.resolve({ status: "fulfilled", value: { data: null } }),
-            item.id_veterinario ? api.get(`/users/${item.id_veterinario}`) : Promise.resolve({ status: "fulfilled", value: { data: null } })
-          ]);
-
-          const pet = petResult.status === "fulfilled" ? petResult.value.data : null;
-          const service = serviceResult.status === "fulfilled" ? serviceResult.value.data : null;
-          const vet = vetResult.status === "fulfilled" ? vetResult.value.data : null;
-          const vetName = vet ? `${vet.first_name || ""} ${vet.last_name || ""}`.trim() : "Por atribuir";
-
-          return {
-            ...item,
-            petName: pet?.nome || "Animal não identificado",
-            serviceName: service?.nome || item.motivo || "Serviço não disponível",
-            vetName,
-            price: item.preco_final ? `${Number(item.preco_final).toFixed(2)}€` : null,
-            observations: item.observacoes || null,
-            cancelReason: item.motivo_cancelamento || null,
-            status: item.estado || "Pendente"
-          };
-        })
-      );
-
-      setAppointments(enrichedAppointments);
-    } catch (err) {
-      Swal.fire({
-        title: "Erro",
-        text: err.response?.data?.message || "Não foi possível marcar a consulta.",
+        text: "Não foi possível atualizar a consulta.",
         icon: "error",
         customClass: swalCustomClass
       });
@@ -424,7 +232,7 @@ const Appointments = () => {
           <p>Consulta, acompanha e gere todas as consultas dos teus animais.</p>
         </div>
 
-        <button className="dashboard-btn" onClick={handleCreateAppointment}>
+        <button className="dashboard-btn" onClick={() => navigate("/client/appointments/book")}>
           <i className="bi bi-calendar-plus"></i>
           Marcar Consulta
         </button>
@@ -515,7 +323,6 @@ const Appointments = () => {
                   <img
                     src={getPetImageUrl(appointment.petPhoto)}
                     alt={appointment.petName}
-                    style={{ width: 56, height: 56, objectFit: 'cover', borderRadius: 8 }}
                   />
                 ) : (
                   <i className="bi bi-heart-pulse"></i>
