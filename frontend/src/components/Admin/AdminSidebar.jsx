@@ -202,6 +202,19 @@ const AdminSidebar = () => {
   </NavLink>
 
   <NavLink
+    to="/admin/contacts"
+    className={({ isActive }) =>
+      `custom-nav-link d-flex align-items-center ${
+        isActive ? "active" : ""
+      }`
+    }
+    onClick={closeMenu}
+  >
+    <i className="bi bi-envelope-paper me-3"></i>
+    Contactos
+  </NavLink>
+
+  <NavLink
     to="/admin/invoices"
     className={({ isActive }) =>
       `custom-nav-link d-flex align-items-center ${

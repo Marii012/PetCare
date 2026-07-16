@@ -45,6 +45,7 @@ import AdminAddAppointmentPage from "./pages/admin/AdminAddAppointmentPage";
 import AdminInvoices from "./pages/admin/AdminInvoices";
 import AdminAddInvoicePage from "./pages/admin/AdminAddInvoicePage";
 import AdminServices from "./pages/admin/AdminServices";
+import AdminContacts from "./pages/admin/AdminContacts";
 
 function App() {
   const location = useLocation();
@@ -106,6 +107,7 @@ function App() {
           <Route path="/admin/appointments" element={<AdminAppointments />} />
           <Route path="/admin/appointments/add" element={<AdminAddAppointmentPage />} />
           <Route path="/admin/services" element={<AdminServices />} />
+          <Route path="/admin/contacts" element={<AdminContacts />} />
           <Route path="/admin/invoices" element={<AdminInvoices />} />
           <Route path="/admin/invoices/add" element={<AdminAddInvoicePage />} />
         </Route>
