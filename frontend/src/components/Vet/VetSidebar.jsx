@@ -49,34 +49,28 @@ const VetSidebar = () => {
     setIsMenuOpen(false);
   };
 
-  const handleLogout = async () => {
-    try {
-      await api.post("/auth/logout");
-    } catch (error) {
-      console.error("Erro ao terminar sessão:", error);
-    } finally {
-      localStorage.removeItem("token");
-      localStorage.removeItem("user");
-      localStorage.removeItem("role");
-
-      Swal.fire({
-        title: "Sessão terminada!",
-        text: "Até breve! Esperamos vê-lo novamente no VetLumen.",
-        icon: "success",
-        timer: 2000,
-        timerProgressBar: true,
-        showConfirmButton: false,
-        customClass: {
-          popup: "vetlumen-swal-popup",
-          title: "vetlumen-swal-title",
-          htmlContainer: "vetlumen-swal-text"
-        }
-      });
-
-      window.setTimeout(() => {
-        navigate("/login");
-      }, 1800);
-    }
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    localStorage.removeItem("role");
+  
+    Swal.fire({
+      title: "Sessão terminada!",
+      text: "Até breve! Esperamos vê-lo novamente no VetLumen.",
+      icon: "success",
+      timer: 2000,
+      timerProgressBar: true,
+      showConfirmButton: false,
+      customClass: {
+        popup: "vetlumen-swal-popup",
+        title: "vetlumen-swal-title",
+        htmlContainer: "vetlumen-swal-text"
+      }
+    });
+  
+    window.setTimeout(() => {
+      navigate("/login");
+    }, 1800);
   };
 
   return (

@@ -36,13 +36,12 @@ function Header() {
 
   // Logout
   const handleLogout = () => {
-
     localStorage.removeItem("token");
     localStorage.removeItem("user");
+    localStorage.removeItem("role");
   
     setUser(null);
-
-
+  
     Swal.fire({
       title: "Sessão terminada!",
       text: "Até breve! Esperamos vê-lo novamente no VetLumen.",
@@ -56,6 +55,10 @@ function Header() {
         htmlContainer: "vetlumen-swal-text"
       }
     });
+  
+    window.setTimeout(() => {
+      navigate("/login");
+    }, 1800);
   };
 
 
