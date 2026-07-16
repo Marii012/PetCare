@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 
-const JWT_SECRET = '1234567890'; 
+const JWT_SECRET = 'petcare_chave_secreta_2026';
 
 const authMiddleware = (req, res, next) => {
 
