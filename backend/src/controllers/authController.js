@@ -6,9 +6,8 @@ const JWT_SECRET = 'petcare_chave_secreta_2026';
 
 const authController = {
 
-  // ==========================================
+
   // REGISTO DE UTILIZADOR
-  // ==========================================
   register: async (req, res) => {
     try {
       const { first_name, last_name, email, password, telefone, id_role } = req.body;

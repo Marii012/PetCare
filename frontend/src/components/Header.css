@@ -192,7 +192,7 @@ header {
   
 }
 
-/* ================= HAMBURGER ANIMATION ================= */
+/* ================= HAMBURGER ================= */
 
 .hamburger {
     width: 42px;
@@ -227,7 +227,6 @@ header {
     transform: translateY(-9px) rotate(-45deg);
 }
 
-/* User logged in */
 .header-user {
   display: flex;
   align-items: center;
@@ -357,17 +356,14 @@ header {
   }
 }
 
-/* A tua seta */
 .dropdown-arrow {
   transition: transform .25s ease;
 }
 
-/* Quando o dropdown está aberto */
 .dropdown-toggle.show .dropdown-arrow {
   transform: rotate(180deg);
 }
 
-/* Esconder completamente a seta do Bootstrap */
 .btn.dropdown-toggle::after,
 .dropdown-toggle::after {
   display: none !important;

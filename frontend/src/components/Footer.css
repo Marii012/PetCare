@@ -3,12 +3,10 @@
     background: #fff;
 }
 
-/* Logo */
 .logo-color {
     color: #78cc28;
 }
 
-/* Títulos */
 .footer-title {
     color: #1a8f1a;
     font-size: 1.1rem;
@@ -16,7 +14,6 @@
     margin-bottom: 1rem;
 }
 
-/* Texto */
 .footer p,
 .footer li {
     color: #6c757d;
@@ -41,7 +38,6 @@
     }
 }
 
-/* Links */
 .footer-link {
     color: #6c757d;
     text-decoration: none;
@@ -121,7 +117,6 @@
     opacity: 1;
 }
 
-/* Linha */
 .footer hr {
     border-color: rgba(0, 0, 0, 0.08);
 }

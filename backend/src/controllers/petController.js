@@ -31,11 +31,11 @@ const petController = {
 
     } catch (error) {
 
-      console.error('Erro ao listar pets:', error);
+      console.error('Erro ao listar animais:', error);
 
       return res.status(500).json({
         error: 'Erro no servidor.',
-        message: 'Não foi possível carregar a lista de pets.'
+        message: 'Não foi possível carregar a lista de animais.'
       });
 
     }
@@ -59,8 +59,8 @@ const petController = {
 
       if (!pet) {
         return res.status(404).json({
-          error: 'Pet não encontrado.',
-          message: 'O pet indicado não existe.'
+          error: 'Animal não encontrado.',
+          message: 'O animal indicado não existe.'
         });
       }
 
@@ -71,11 +71,11 @@ const petController = {
 
     } catch (error) {
 
-      console.error('Erro ao procurar pet:', error);
+      console.error('Erro ao procurar animal:', error);
 
       return res.status(500).json({
         error: 'Erro no servidor.',
-        message: 'Não foi possível obter o pet.'
+        message: 'Não foi possível obter o animal.'
       });
 
     }
@@ -216,18 +216,18 @@ const petController = {
 
 
       return res.status(201).json({
-        message: 'Pet criado com sucesso!',
+        message: 'Animal criado com sucesso!',
         pet
       });
 
 
     } catch (error) {
 
-      console.error('Erro ao criar pet:', error);
+      console.error('Erro ao criar animal:', error);
 
       return res.status(500).json({
         error: 'Erro no servidor.',
-        message: 'Não foi possível criar o pet.'
+        message: 'Não foi possível criar o animal.'
       });
 
     }
@@ -244,8 +244,8 @@ const petController = {
 
       if (!pet) {
         return res.status(404).json({
-          error: 'Pet não encontrado.',
-          message: 'O pet indicado não existe.'
+          error: 'Animal não encontrado.',
+          message: 'O animal indicado não existe.'
         });
       }
 
@@ -288,18 +288,18 @@ const petController = {
 
 
       return res.status(200).json({
-        message: 'Pet atualizado com sucesso!',
+        message: 'Animal atualizado com sucesso!',
         pet
       });
 
 
     } catch (error) {
 
-      console.error('Erro ao atualizar pet:', error);
+      console.error('Erro ao atualizar animal:', error);
 
       return res.status(500).json({
         error: 'Erro no servidor.',
-        message: 'Não foi possível atualizar o pet.'
+        message: 'Não foi possível atualizar o animal.'
       });
 
     }
@@ -316,8 +316,8 @@ const petController = {
 
       if (!pet) {
         return res.status(404).json({
-          error: 'Pet não encontrado.',
-          message: 'O pet indicado não existe.'
+          error: 'Animal não encontrado.',
+          message: 'O animal indicado não existe.'
         });
       }
 
@@ -326,7 +326,7 @@ const petController = {
 
 
       return res.status(200).json({
-        message: 'Pet eliminado com sucesso.'
+        message: 'Animal eliminado com sucesso.'
       });
 
 
@@ -336,7 +336,7 @@ const petController = {
 
       return res.status(500).json({
         error: 'Erro no servidor.',
-        message: 'Não foi possível eliminar o pet.'
+        message: 'Não foi possível eliminar o animal.'
       });
 
     }
