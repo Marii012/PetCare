@@ -221,6 +221,10 @@ body {
 	font-weight: 600;
 }
 
+.admin-services .services-page-size {
+	min-width: 150px;
+}
+
 .admin-services .admin-services-select {
 	width: 100%;
 }
@@ -440,44 +444,58 @@ body {
 .admin-services .services-actions {
 	display: flex;
 	align-items: center;
-	gap: 8px;
+	gap: 10px;
+	flex-wrap: nowrap;
+	white-space: nowrap;
 }
 
 .admin-services .services-actions button {
-	width: 36px;
-	height: 36px;
+	width: 48px;
+	height: 48px;
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
-	border-radius: 10px;
-	border: 1px solid #dbe4ee;
-	background: #ffffff;
-	color: #475569;
+	border: 1px solid transparent;
+	border-radius: 12px;
+	background: #f8fafc;
 	cursor: pointer;
-	transition: 0.2s;
+	transition: .25s;
+	flex-shrink: 0;
 }
 
-.admin-services .services-actions button:hover:not(:disabled) {
+.admin-services .services-actions .edit-service-btn {
+	color: #2563eb;
+	border: 1px solid #bfdbfe;
+	background: #eff6ff;
+	background-color: #eff6ff;
+}
+
+.admin-services .services-actions .delete-service-btn {
+	color: #dc2626;
+	border: 1px solid #fecaca;
+	background: #fef2f2;
+	background-color: #fef2f2;
+}
+
+.admin-services .services-actions .edit-service-btn:hover,
+.admin-services .services-actions .edit-service-btn:focus-visible {
+	background: #dbeafe;
+	background-color: #dbeafe;
+	border-color: #93c5fd;
 	transform: translateY(-1px);
-	border-color: #c7d2fe;
-	background: #f8fafc;
+}
+
+.admin-services .services-actions .delete-service-btn:hover:not(:disabled),
+.admin-services .services-actions .delete-service-btn:focus-visible:not(:disabled) {
+	background: #fee2e2;
+	background-color: #fee2e2;
+	border-color: #fca5a5;
+	transform: translateY(-1px);
 }
 
 .admin-services .services-actions button:disabled {
-	opacity: 0.7;
+	opacity: .55;
 	cursor: not-allowed;
-}
-
-.admin-services .edit-service-btn:hover:not(:disabled) {
-	color: #2563eb;
-	border-color: rgba(37, 99, 235, 0.4);
-	background: rgba(37, 99, 235, 0.08);
-}
-
-.admin-services .delete-service-btn:hover:not(:disabled) {
-	color: #dc2626;
-	border-color: rgba(220, 38, 38, 0.4);
-	background: rgba(220, 38, 38, 0.08);
 }
 
 .admin-services .services-pagination {

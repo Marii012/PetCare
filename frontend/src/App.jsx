@@ -103,9 +103,13 @@ function App() {
           <Route path="/admin/users" element={<AdminUsers />} />
           <Route path="/admin/pets" element={<AdminPets />} />
           <Route path="/admin/pets/add" element={<AdminAddPetPage />} />
+          <Route path="/admin/pets/:id" element={<PetDetails />} />
+          <Route path="/admin/pets/:id/history" element={<PetHistory />} />
+          <Route path="/admin/pets/:id/vaccines" element={<PetVaccines />} />
           <Route path="/admin/pets/:id/edit" element={<AdminEditPetPage />} />
           <Route path="/admin/appointments" element={<AdminAppointments />} />
           <Route path="/admin/appointments/add" element={<AdminAddAppointmentPage />} />
+          <Route path="/admin/appointments/:id/edit" element={<AdminAddAppointmentPage />} />
           <Route path="/admin/services" element={<AdminServices />} />
           <Route path="/admin/contacts" element={<AdminContacts />} />
           <Route path="/admin/invoices" element={<AdminInvoices />} />

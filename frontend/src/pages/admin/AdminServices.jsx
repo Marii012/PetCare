@@ -355,7 +355,7 @@ const AdminServices = () => {
 						/>
 					</label>
 
-					<label className="services-page-size">
+					<label className="services-select-field services-page-size">
 						<span>Por página</span>
 						<Select
 							className="admin-services-select admin-services-select--compact"

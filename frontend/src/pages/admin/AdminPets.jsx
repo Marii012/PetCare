@@ -515,7 +515,7 @@ const AdminPets = () => {
 					<div className="search-box">
 						<i className="bi bi-search"></i>
 						<input
-							placeholder="Pesquisar por nome, tutor, espécie, raça ou chip..."
+							placeholder="Pesquisar por nome, dono, espécie, raça ou chip..."
 							value={search}
 							onChange={handleSearchChange}
 						/>
@@ -605,7 +605,7 @@ const AdminPets = () => {
 							<thead>
 								<tr>
 									<th>Animal</th>
-									<th>Tutor</th>
+									<th>Dono</th>
 									<th>Espécie / Raça</th>
 									<th>Sexo</th>
 									<th>Nascimento</th>
@@ -664,15 +664,15 @@ const AdminPets = () => {
 
 											<td data-label="Ações">
 												<div className="pets-actions">
-													<button className="details-btn" onClick={() => navigate(`/vet/patients/${pet.id_pet}`)} title="Detalhes do animal">
-														<i className="bi bi-eye"></i>
-													</button>
+                                        <button className="details-btn" onClick={() => navigate(`/admin/pets/${pet.id_pet}`)} title="Detalhes do animal">
+											<i className="bi bi-eye"></i>
+										</button>
 
-													<button className="history-btn" onClick={() => navigate(`/vet/patients/${pet.id_pet}/history`)} title="Histórico do animal">
-														<i className="bi bi-file-medical"></i>
-													</button>
+										<button className="history-btn" onClick={() => navigate(`/admin/pets/${pet.id_pet}/history`)} title="Histórico do animal">
+											<i className="bi bi-file-medical"></i>
+										</button>
 
-													<button className="vaccine-btn" onClick={() => navigate(`/vet/patients/${pet.id_pet}/vaccines`)} title="Vacinas do animal">
+										<button className="vaccine-btn" onClick={() => navigate(`/admin/pets/${pet.id_pet}/vaccines`)} title="Vacinas do animal">
 														<i className="bi bi-capsule"></i>
 													</button>
 

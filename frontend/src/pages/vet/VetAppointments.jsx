@@ -143,13 +143,17 @@ const VetAppointments = () => {
             }
           }
 
+          const ownerName = owner
+            ? `${owner.first_name || ""} ${owner.last_name || ""}`.trim() || owner.email || "Dono não identificado"
+            : "Dono não identificado";
+
           return {
             ...appointment,
             petName: pet?.nome || "Animal",
             petPhoto: getPetImageUrl(pet?.fotografia),
-            ownerName: owner
-              ? `${owner.first_name || ""} ${owner.last_name || ""}`.trim() || owner.email
-              : "Dono não identificado"
+            ownerName,
+            ownerEmail: owner?.email || "",
+            ownerPhone: owner?.telefone || ""
           };
         })
       );
@@ -239,6 +243,10 @@ const VetAppointments = () => {
         <p><strong>Animal:</strong> ${appointment.petName || "Animal"}</p>
 
         <p><strong>Dono:</strong> ${appointment.ownerName || "Dono não identificado"}</p>
+
+        <p><strong>Telefone:</strong> ${appointment.ownerPhone || "Não informado"}</p>
+
+        <p><strong>Email:</strong> ${appointment.ownerEmail || "Não informado"}</p>
 
         <p><strong>Motivo:</strong> ${appointment.motivo || "Consulta"}</p>
 

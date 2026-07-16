@@ -59,10 +59,9 @@ const VetPatients = () => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const [petsResponse, speciesResponse, usersResponse] = await Promise.all([
+      const [petsResponse, speciesResponse] = await Promise.all([
         api.get("/pets"),
-        api.get("/species"),
-        api.get("/users")
+        api.get("/species")
       ]);
 
       const speciesFromApi = (speciesResponse.data || []).map((species) => ({
@@ -70,19 +69,9 @@ const VetPatients = () => {
         label: species.nome_especie
       }));
 
-      const usersMap = new Map((usersResponse.data || []).map((user) => [Number(user.id_user), user]));
-
-      const enrichedPets = (petsResponse.data || []).map((pet) => {
-        const owner = usersMap.get(Number(pet.id_user));
-        const ownerName = owner
-          ? `${owner.first_name || ""} ${owner.last_name || ""}`.trim() || owner.email
-          : "Tutor não identificado";
-
-        return {
-          ...pet,
-          ownerName
-        };
-      });
+      const enrichedPets = (petsResponse.data || []).map((pet) => ({
+        ...pet
+      }));
 
       setSpeciesOptions([{ value: "all", label: "Todas as espécies" }, ...speciesFromApi]);
       setSpeciesFilter({ value: "all", label: "Todas as espécies" });
@@ -104,9 +93,7 @@ const VetPatients = () => {
 
   const filteredPets = pets.filter((pet) => {
     const searchValue = search.toLowerCase();
-    const matchesSearch =
-      pet.nome?.toLowerCase().includes(searchValue) ||
-      pet.ownerName?.toLowerCase().includes(searchValue);
+    const matchesSearch = pet.nome?.toLowerCase().includes(searchValue);
     const matchesSpecies = speciesFilter.value === "all" || pet.id_species === speciesFilter.value;
 
     return matchesSearch && matchesSpecies;
@@ -156,7 +143,6 @@ const VetPatients = () => {
                 <th>Espécie</th>
                 <th>Raça</th>
                 <th>Idade / Peso</th>
-                <th>Dono</th>
                 <th>Estado</th>
                 <th>Ações</th>
               </tr>
@@ -196,8 +182,6 @@ const VetPatients = () => {
                       <span>{pet.peso ? `${pet.peso}kg` : "Peso não registado"}</span>
                     </div>
                   </td>
-
-                  <td data-label="Dono">{pet.ownerName}</td>
 
                   <td data-label="Estado">
                     <span className="pet-status-badge">{pet.estado || "Ativo"}</span>

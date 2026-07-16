@@ -513,9 +513,9 @@ const AdminAppointments = () => {
 						/>
 					</label>
 
-					<label className="markings-select-field">
+					<label className="markings-select-field markings-date-field">
 						<span>Data</span>
-						<input type="date" value={selectedDate} onChange={(event) => setSelectedDate(event.target.value)} />
+						<input className="markings-date-input" type="date" value={selectedDate} onChange={(event) => setSelectedDate(event.target.value)} />
 					</label>
 
 					<label className="markings-page-size">
@@ -608,7 +608,7 @@ const AdminAppointments = () => {
 										</td>
 										<td data-label="Ações">
 											<div className="markings-actions">
-												<button className="edit-marking-btn" onClick={() => openAppointmentForm(appointment)}>
+												<button className="edit-marking-btn" onClick={() => navigate(`/admin/appointments/${appointment.id_appointment}/edit`)}>
 													<i className="bi bi-pencil-square"></i>
 												</button>
 

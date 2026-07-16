@@ -185,6 +185,29 @@ html, body {
 	font-weight: 600;
 }
 
+.admin-markings .markings-date-field {
+	min-width: 190px;
+}
+
+.admin-markings .markings-date-input {
+	min-height: 54px;
+	width: 100%;
+	padding: 0 14px;
+	border: 1px solid #e2e8f0;
+	border-radius: 16px;
+	background: #ffffff;
+	color: #334155;
+	font-size: .95rem;
+	font-weight: 600;
+	outline: none;
+	font-family: 'Poppins', sans-serif;
+}
+
+.admin-markings .markings-date-input:focus {
+	border-color: #78cc28;
+	box-shadow: 0 0 0 4px rgba(120, 204, 40, .12);
+}
+
 .admin-markings .admin-markings-select {
 	width: 100%;
 }

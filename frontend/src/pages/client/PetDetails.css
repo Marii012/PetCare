@@ -124,8 +124,8 @@
 .details-card {
     background: #ffffff;
     border: 1px solid #e2e8f0;
-    border-radius: 24px;
-    padding: 35px;
+    border-radius: 20px;
+    padding: 24px 26px;
     box-shadow: 0 4px 12px rgba(15, 23, 42, .03);
     transition: all .3s cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -140,8 +140,8 @@
     display: flex;
     align-items: center;
     gap: 14px;
-    margin: 0 0 28px;
-    font-size: 1.35rem;
+    margin: 0 0 18px;
+    font-size: 1.2rem;
     font-weight: 700;
     color: #0f172a;
 }
@@ -161,14 +161,14 @@
 .details-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 24px;
+    gap: 16px;
 }
 
 .details-grid div {
     background: #f8fafc;
     border: 1px solid #e2e8f0;
-    padding: 20px;
-    border-radius: 18px;
+    padding: 16px 18px;
+    border-radius: 16px;
     transition: all .2s ease;
 }
 
@@ -190,9 +190,52 @@
 
 .details-grid p {
     margin: 0;
-    font-size: 1.05rem;
+    font-size: 1rem;
     font-weight: 600;
     color: #1e293b;
+}
+
+.record-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.inline-edit-btn,
+.inline-save-btn,
+.inline-cancel-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 8px 12px;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    background: #f8fafc;
+    color: #334155;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all .2s ease;
+}
+
+.inline-save-btn {
+    background: #78cc28;
+    border-color: #78cc28;
+    color: #ffffff;
+}
+
+.inline-cancel-btn {
+    background: #fff7ed;
+    border-color: #fdba74;
+    color: #c2410c;
+}
+
+.inline-edit-btn:hover,
+.inline-save-btn:hover,
+.inline-cancel-btn:hover {
+    transform: translateY(-1px);
 }
 
 /* ==========================================================================

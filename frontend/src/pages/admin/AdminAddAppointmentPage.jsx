@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Select from "react-select";
 import Swal from "sweetalert2";
 import api from "../../services/api";
@@ -30,6 +30,8 @@ const initialForm = {
 
 const AdminAddAppointmentPage = () => {
   const navigate = useNavigate();
+  const { id } = useParams();
+  const isEditing = Boolean(id);
   const [pets, setPets] = useState([]);
   const [users, setUsers] = useState([]);
   const [services, setServices] = useState([]);
@@ -45,15 +47,37 @@ const AdminAddAppointmentPage = () => {
   useEffect(() => {
     const loadData = async () => {
       try {
-        const [petsResponse, usersResponse, servicesResponse] = await Promise.all([
+        const [petsResponse, usersResponse, servicesResponse, appointmentResponse] = await Promise.all([
           api.get("/pets"),
           api.get("/users"),
-          api.get("/services")
+          api.get("/services"),
+          isEditing ? api.get(`/appointments/${id}`) : Promise.resolve({ data: null })
         ]);
 
         setPets(petsResponse.data || []);
         setUsers(usersResponse.data || []);
         setServices(servicesResponse.data || []);
+
+        if (isEditing && appointmentResponse.data) {
+          const appointment = appointmentResponse.data;
+          setForm({
+            data: appointment.data ? String(appointment.data).slice(0, 10) : "",
+            hora: appointment.hora ? String(appointment.hora).slice(0, 5) : "",
+            motivo: appointment.motivo || "",
+            estado: appointment.estado || "Pendente",
+            observacoes: appointment.observacoes || "",
+            preco_final: appointment.preco_final ?? "",
+            duracao_real: appointment.duracao_real ?? "",
+            motivo_cancelamento: appointment.motivo_cancelamento || "",
+            id_pet: appointment.id_pet ? String(appointment.id_pet) : "",
+            id_veterinario: appointment.id_veterinario ? String(appointment.id_veterinario) : "",
+            id_service: appointment.id_service ? String(appointment.id_service) : ""
+          });
+          setSelectedPet(appointment.id_pet ? { value: String(appointment.id_pet), label: `${getPetName(petsResponse.data?.find((pet) => String(pet.id_pet) === String(appointment.id_pet)) || {})}` } : null);
+          setSelectedVet(appointment.id_veterinario ? { value: String(appointment.id_veterinario), label: getVetName(usersResponse.data?.find((user) => String(user.id_user) === String(appointment.id_veterinario)) || {}) } : null);
+          setSelectedService(appointment.id_service ? { value: String(appointment.id_service), label: servicesResponse.data?.find((service) => String(service.id_service) === String(appointment.id_service))?.nome || "" } : null);
+          setSelectedStatus({ value: appointment.estado || "Pendente", label: appointment.estado || "Pendente" });
+        }
       } catch (loadError) {
         console.error("Erro ao carregar dados da marcação:", loadError);
         setError("Não foi possível carregar os dados necessários.");
@@ -63,7 +87,7 @@ const AdminAddAppointmentPage = () => {
     };
 
     loadData();
-  }, []);
+  }, [id, isEditing]);
 
   const usersById = useMemo(
     () => Object.fromEntries(users.map((user) => [String(user.id_user), user])),
@@ -144,23 +168,39 @@ const AdminAddAppointmentPage = () => {
       setSaving(true);
       setError("");
 
-      await api.post("/appointments", {
-        data: form.data,
-        hora: form.hora,
-        motivo: form.motivo.trim(),
-        estado: form.estado,
-        observacoes: form.observacoes.trim(),
-        preco_final: form.preco_final === "" ? null : Number(form.preco_final),
-        motivo_cancelamento: form.motivo_cancelamento.trim(),
-        duracao_real: form.duracao_real === "" ? null : Number(form.duracao_real),
-        id_pet: Number(form.id_pet),
-        id_veterinario: Number(form.id_veterinario),
-        id_service: Number(form.id_service)
-      });
+      if (isEditing) {
+        await api.put(`/appointments/${id}`, {
+          data: form.data,
+          hora: form.hora,
+          motivo: form.motivo.trim(),
+          estado: form.estado,
+          observacoes: form.observacoes.trim(),
+          preco_final: form.preco_final === "" ? null : Number(form.preco_final),
+          motivo_cancelamento: form.motivo_cancelamento.trim(),
+          duracao_real: form.duracao_real === "" ? null : Number(form.duracao_real),
+          id_pet: Number(form.id_pet),
+          id_veterinario: Number(form.id_veterinario),
+          id_service: Number(form.id_service)
+        });
+      } else {
+        await api.post("/appointments", {
+          data: form.data,
+          hora: form.hora,
+          motivo: form.motivo.trim(),
+          estado: form.estado,
+          observacoes: form.observacoes.trim(),
+          preco_final: form.preco_final === "" ? null : Number(form.preco_final),
+          motivo_cancelamento: form.motivo_cancelamento.trim(),
+          duracao_real: form.duracao_real === "" ? null : Number(form.duracao_real),
+          id_pet: Number(form.id_pet),
+          id_veterinario: Number(form.id_veterinario),
+          id_service: Number(form.id_service)
+        });
+      }
 
       await Swal.fire({
-        title: "Criada!",
-        text: "Marcação criada com sucesso.",
+        title: isEditing ? "Atualizada!" : "Criada!",
+        text: isEditing ? "Marcação atualizada com sucesso." : "Marcação criada com sucesso.",
         icon: "success",
         customClass: {
           popup: "vetlumen-swal-popup",
@@ -183,8 +223,8 @@ const AdminAddAppointmentPage = () => {
     <main className="admin-markings dashboard-container admin-add-appointment-page">
       <header className="dashboard-header">
         <div>
-          <h1>Nova marcação</h1>
-          <p>Crie uma nova marcação numa página dedicada.</p>
+          <h1>{isEditing ? "Editar marcação" : "Nova marcação"}</h1>
+          <p>{isEditing ? "Atualize os dados desta marcação numa página dedicada." : "Crie uma nova marcação numa página dedicada."}</p>
         </div>
 
         <button
@@ -350,7 +390,7 @@ const AdminAddAppointmentPage = () => {
                 Cancelar
               </button>
               <button type="submit" className="dashboard-btn" disabled={saving}>
-                {saving ? "A guardar..." : "Criar marcação"}
+                {saving ? "A guardar..." : isEditing ? "Guardar alterações" : "Criar marcação"}
               </button>
             </div>
           </form>
