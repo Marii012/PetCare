@@ -2,7 +2,7 @@
    SIDEBAR
 ================================================== */
 
-.sidebar-container {
+#adminSidebar.sidebar-container {
     position: fixed;
     top: 0;
     left: 0;
@@ -10,7 +10,7 @@
     width: 320px;
     height: 100vh;
 
-    z-index: 100;
+    z-index: 1046;
 
     background:
     linear-gradient(
@@ -29,6 +29,33 @@
     overflow-y: auto;
 
     overflow-x: hidden;
+
+    transition: transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.25s ease;
+}
+
+.admin-sidebar-toggler {
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  z-index: 1047;
+  display: none !important;
+}
+
+.admin-sidebar-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.45);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.25s ease, visibility 0.25s ease;
+  z-index: 1045;
+  pointer-events: none;
+}
+
+.admin-sidebar-overlay.show {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
 }
 
 .sidebar-container::-webkit-scrollbar {
@@ -43,6 +70,48 @@
 .sidebar-container::-webkit-scrollbar-thumb:hover {
   background: #94a3b8;
 }
+/* ==================================================
+   BRAND
+================================================== */
+
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 24px;
+  padding: 8px 4px;
+  text-decoration: none;
+  color: #2d3748;
+  transition: transform 0.25s ease, color 0.25s ease;
+}
+
+.sidebar-brand:hover {
+  color: #78cc28;
+  transform: translateX(4px);
+  text-decoration: none;
+}
+
+.sidebar-brand-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: auto;
+  height: auto;
+  padding: 0;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  font-size: 1.3rem;
+  color: #78cc28;
+}
+
+.sidebar-brand-text {
+  font-size: 1.08rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
 /* ==================================================
    PERFIL
 ================================================== */
@@ -111,6 +180,7 @@
   padding: 14px 18px;
 
   border-radius: 14px;
+  border: 1px solid transparent;
 
   text-decoration: none;
 
@@ -119,6 +189,7 @@
   font-weight: 500;
 
   transition: all .25s ease;
+  box-shadow: 0 0px 0px rgba(0, 0, 0, 0);
 }
 
 .custom-nav-link i {
@@ -193,4 +264,60 @@
 
   color: #d62828;
   transform: translateX(4px);
+}
+
+.admin-hamburger {
+  width: 42px;
+  height: 38px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
+  border: 0;
+  background: transparent;
+  padding: 0;
+}
+
+.admin-hamburger span {
+  width: 26px;
+  height: 3px;
+  background: #78cc28;
+  border-radius: 10px;
+  transition: all .3s ease;
+  display: block;
+}
+
+.admin-hamburger.active span:nth-child(1) {
+  transform: translateY(9px) rotate(45deg);
+}
+
+.admin-hamburger.active span:nth-child(2) {
+  opacity: 0;
+}
+
+.admin-hamburger.active span:nth-child(3) {
+  transform: translateY(-9px) rotate(-45deg);
+}
+
+@media (max-width: 992px) {
+  .admin-sidebar-toggler {
+    display: flex !important;
+  }
+
+  #adminSidebar.sidebar-container {
+    width: min(85vw, 320px);
+    height: 100vh;
+    border-radius: 0 30px 30px 0;
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+
+  #adminSidebar.sidebar-container.open {
+    transform: translateX(0);
+    opacity: 1;
+  }
+
+  .profile-section {
+    margin-top: 28px;
+  }
 }

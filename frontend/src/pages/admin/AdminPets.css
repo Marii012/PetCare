@@ -134,12 +134,12 @@ html, body {
 	display: flex;
 	align-items: flex-end;
 	gap: 16px;
-	flex-wrap: wrap;
+	flex-wrap: nowrap;
 }
 
 .admin-pets .search-box {
-	flex: 1;
-	min-width: 280px;
+	flex: 1 1 320px;
+	min-width: 220px;
 	display: flex;
 	align-items: center;
 	gap: 12px;
@@ -179,29 +179,83 @@ html, body {
 	display: flex;
 	flex-direction: column;
 	gap: 6px;
-	min-width: 190px;
+	flex: 0 0 180px;
+	min-width: 180px;
 	color: #475569;
 	font-size: .9rem;
 	font-weight: 600;
 }
 
-.admin-pets .pets-select-field select,
-.admin-pets .pets-page-size select {
-	min-height: 54px;
-	padding: 0 14px;
-	border: 1px solid #e2e8f0;
-	border-radius: 16px;
-	background: #ffffff;
-	color: #334155;
-	font-weight: 600;
-	cursor: pointer;
-	outline: none;
+.admin-pets .admin-pets-select {
+	width: 100%;
 }
 
-.admin-pets .pets-select-field select:focus,
-.admin-pets .pets-page-size select:focus {
-	border-color: #78cc28;
-	box-shadow: 0 0 0 .2rem rgba(120, 204, 40, .12);
+.admin-pets .admin-pets-select--compact {
+	min-width: 120px;
+}
+
+.admin-pets .admin-pets-select__control {
+	min-height: 54px !important;
+	border: 1px solid #e2e8f0 !important;
+	border-radius: 16px !important;
+	box-shadow: none !important;
+	transition: .25s;
+	padding: 0 14px !important;
+	font-size: .95rem !important;
+	background: #ffffff !important;
+}
+
+.admin-pets .admin-pets-select__control:hover {
+	border-color: #78cc28 !important;
+}
+
+.admin-pets .admin-pets-select__control--is-focused {
+	border-color: #78cc28 !important;
+	box-shadow: 0 0 0 .2rem rgba(120, 204, 40, .15) !important;
+}
+
+.admin-pets .admin-pets-select__indicator-separator {
+	display: none;
+}
+
+.admin-pets .admin-pets-select__dropdown-indicator {
+	color: #94a3b8 !important;
+}
+
+.admin-pets .admin-pets-select__placeholder {
+	color: #94a3b8;
+}
+
+.admin-pets .admin-pets-select__single-value {
+	color: #334155;
+}
+
+.admin-pets .admin-pets-select__menu {
+	border: none !important;
+	border-radius: 18px !important;
+	overflow: hidden;
+	margin-top: 6px !important;
+	box-shadow: 0 12px 40px rgba(0, 0, 0, .12), 0 4px 12px rgba(0, 0, 0, .05);
+}
+
+.admin-pets .admin-pets-select__menu-list {
+	padding: 6px !important;
+}
+
+.admin-pets .admin-pets-select__option {
+	border-radius: 12px;
+	padding: 12px 16px;
+	color: #334155;
+}
+
+.admin-pets .admin-pets-select__option--is-focused {
+	background: #f5f5f5 !important;
+	color: #333 !important;
+}
+
+.admin-pets .admin-pets-select__option--is-selected {
+	background: #78cc28 !important;
+	color: white !important;
 }
 
 .admin-pets .pets-summary {

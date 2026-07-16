@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 import api from "../../services/api";
 import "./Sidebar.css";
 
 const Sidebar = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [user, setUser] = useState(null);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -16,31 +19,100 @@ const Sidebar = () => {
     }
   }, []);
 
+  useEffect(() => {
+    setIsMenuOpen(false);
+  }, [location.pathname]);
+
+  useEffect(() => {
+    const handleEscape = (event) => {
+      if (event.key === "Escape") {
+        setIsMenuOpen(false);
+      }
+    };
+
+    window.addEventListener("keydown", handleEscape);
+    return () => window.removeEventListener("keydown", handleEscape);
+  }, []);
+
+  useEffect(() => {
+    document.body.style.overflow = isMenuOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isMenuOpen]);
+
+  const toggleMenu = () => {
+    setIsMenuOpen((prev) => !prev);
+  };
+
+  const closeMenu = () => {
+    setIsMenuOpen(false);
+  };
+
   const handleLogout = async () => {
     try {
-      // Use api instance so Authorization header is enviado
       await api.post("/auth/logout");
-
-      // Limpar dados da sessão
-      localStorage.removeItem("token");
-      localStorage.removeItem("user");
-
-      // Redirect to login
-      navigate("/login");
-      // full reload to reset app state
-      window.location.reload();
     } catch (error) {
       console.error("Erro ao terminar sessão:", error);
-      // fallback: limpar e redirecionar
+    } finally {
       localStorage.removeItem("token");
       localStorage.removeItem("user");
-      navigate("/login");
+      localStorage.removeItem("role");
+
+      Swal.fire({
+        title: "Sessão terminada!",
+        text: "Até breve! Esperamos vê-lo novamente no VetLumen.",
+        icon: "success",
+        timer: 2000,
+        timerProgressBar: true,
+        showConfirmButton: false,
+        customClass: {
+          popup: "vetlumen-swal-popup",
+          title: "vetlumen-swal-title",
+          htmlContainer: "vetlumen-swal-text"
+        }
+      });
+
+      window.setTimeout(() => {
+        navigate("/login");
+        window.location.reload();
+      }, 1800);
     }
   };
 
   return (
-    <aside className="sidebar-container d-flex flex-column justify-content-between p-4">
+    <>
+      <button
+        className={`client-sidebar-toggler hamburger ${isMenuOpen ? "active" : ""}`}
+        type="button"
+        aria-label="Abrir menu"
+        aria-expanded={isMenuOpen}
+        aria-controls="clientSidebar"
+        onClick={toggleMenu}
+      >
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      <div
+        className={`client-sidebar-overlay ${isMenuOpen ? "show" : ""}`}
+        onClick={closeMenu}
+        aria-hidden={!isMenuOpen}
+      />
+
+      <aside
+        id="clientSidebar"
+        className={`sidebar-container d-flex flex-column justify-content-between p-4 ${
+          isMenuOpen ? "open" : ""
+        }`}
+      >
       <div>
+        <NavLink to="/" className="sidebar-brand" onClick={closeMenu}>
+          <i className="bi bi-heart-pulse-fill sidebar-brand-icon"></i>
+          <span className="sidebar-brand-text">VetLumen</span>
+        </NavLink>
+
         {/* Perfil */}
         <div className="profile-section mb-5">
           <div className="profile-icon">
@@ -56,65 +128,60 @@ const Sidebar = () => {
 
         {/* Menu */}
         <nav className="nav flex-column gap-2">
-          <NavLink
-  to="/client/dashboard"
-  className={({ isActive }) =>
-    `custom-nav-link d-flex align-items-center ${
-      isActive ? "active" : ""
-    }`
-  }
->
-  <i className="bi bi-grid-1x2-fill me-3"></i>
-  Resumo
-</NavLink>
+                    <NavLink
+                      to="/client/dashboard"
+                      className={({ isActive }) =>
+                        `custom-nav-link d-flex align-items-center ${isActive ? "active" : ""}`
+                      }
+                      onClick={closeMenu}
+                    >
+                      <i className="bi bi-grid-1x2-fill me-3"></i>
+                      Resumo
+                    </NavLink>
 
-<NavLink
-  to="/client/pets"
-  className={({ isActive }) =>
-    `custom-nav-link d-flex align-items-center ${
-      isActive ? "active" : ""
-    }`
-  }
->
-  <i className="bi bi-heart me-3"></i>
-  Os Meus Animais
-</NavLink>
+                    <NavLink
+                      to="/client/pets"
+                      className={({ isActive }) =>
+                        `custom-nav-link d-flex align-items-center ${isActive ? "active" : ""}`
+                      }
+                      onClick={closeMenu}
+                    >
+                      <i className="bi bi-heart me-3"></i>
+                      Os Meus Animais
+                    </NavLink>
 
-<NavLink
-  to="/client/appointments"
-  className={({ isActive }) =>
-    `custom-nav-link d-flex align-items-center ${
-      isActive ? "active" : ""
-    }`
-  }
->
-  <i className="bi bi-calendar-event me-3"></i>
-  Consultas
-</NavLink>
+                    <NavLink
+                      to="/client/appointments"
+                      className={({ isActive }) =>
+                        `custom-nav-link d-flex align-items-center ${isActive ? "active" : ""}`
+                      }
+                      onClick={closeMenu}
+                    >
+                      <i className="bi bi-calendar-event me-3"></i>
+                      Consultas
+                    </NavLink>
 
-<NavLink
-  to="/client/invoices"
-  className={({ isActive }) =>
-    `custom-nav-link d-flex align-items-center ${
-      isActive ? "active" : ""
-    }`
-  }
->
-  <i className="bi bi-receipt me-3"></i>
-  Faturas
-</NavLink>
+                    <NavLink
+                      to="/client/invoices"
+                      className={({ isActive }) =>
+                        `custom-nav-link d-flex align-items-center ${isActive ? "active" : ""}`
+                      }
+                      onClick={closeMenu}
+                    >
+                      <i className="bi bi-receipt me-3"></i>
+                      Faturas
+                    </NavLink>
 
-<NavLink
-  to="/client/profile"
-  className={({ isActive }) =>
-    `custom-nav-link d-flex align-items-center ${
-      isActive ? "active" : ""
-    }`
-  }
->
-  <i className="bi bi-person me-3"></i>
-  Perfil
-</NavLink>
+                    <NavLink
+                      to="/client/profile"
+                      className={({ isActive }) =>
+                        `custom-nav-link d-flex align-items-center ${isActive ? "active" : ""}`
+                      }
+                      onClick={closeMenu}
+                    >
+                      <i className="bi bi-person me-3"></i>
+                      Perfil
+                    </NavLink>
         </nav>
       </div>
 
@@ -128,7 +195,8 @@ const Sidebar = () => {
           Terminar Sessão
         </button>
       </div>
-    </aside>
+      </aside>
+    </>
   );
 };
 

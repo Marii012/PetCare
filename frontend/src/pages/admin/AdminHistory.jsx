@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Select from "react-select";
 import api from "../../services/api";
 import "./AdminHistory.css";
 
@@ -219,22 +220,46 @@ const AdminHistory = () => {
         <div className="history-filters">
           <div className="chart-controls-inline">
             <label>Tipo:</label>
-            <select value={typeFilter} onChange={(e) => setTypeFilter(e.target.value)}>
-              <option value="all">Todas</option>
-              <option value="consultas">Consultas</option>
-              <option value="faturas">Faturas</option>
-              <option value="utilizadores">Utilizadores</option>
-            </select>
+            <Select
+              className="admin-history-select"
+              classNamePrefix="admin-history-select"
+              options={[
+                { value: "all", label: "Todas" },
+                { value: "consultas", label: "Consultas" },
+                { value: "faturas", label: "Faturas" },
+                { value: "utilizadores", label: "Utilizadores" }
+              ]}
+              value={[
+                { value: "all", label: "Todas" },
+                { value: "consultas", label: "Consultas" },
+                { value: "faturas", label: "Faturas" },
+                { value: "utilizadores", label: "Utilizadores" }
+              ].find((option) => option.value === typeFilter) || null}
+              onChange={(option) => setTypeFilter(option?.value || "all")}
+              isSearchable={false}
+            />
           </div>
 
           <div className="chart-controls-inline">
             <label>Data:</label>
-            <select value={dateFilter} onChange={(e) => setDateFilter(e.target.value)}>
-              <option value="today">Hoje</option>
-              <option value="last7">Últimos 7 dias</option>
-              <option value="lastMonth">Último mês</option>
-              <option value="custom">Personalizado</option>
-            </select>
+            <Select
+              className="admin-history-select"
+              classNamePrefix="admin-history-select"
+              options={[
+                { value: "today", label: "Hoje" },
+                { value: "last7", label: "Últimos 7 dias" },
+                { value: "lastMonth", label: "Último mês" },
+                { value: "custom", label: "Personalizado" }
+              ]}
+              value={[
+                { value: "today", label: "Hoje" },
+                { value: "last7", label: "Últimos 7 dias" },
+                { value: "lastMonth", label: "Último mês" },
+                { value: "custom", label: "Personalizado" }
+              ].find((option) => option.value === dateFilter) || null}
+              onChange={(option) => setDateFilter(option?.value || "today")}
+              isSearchable={false}
+            />
           </div>
 
           {dateFilter === "custom" && (
@@ -258,11 +283,14 @@ const AdminHistory = () => {
 
           <div className="chart-controls-inline">
             <label>Por página:</label>
-            <select value={pageSize} onChange={(e) => setPageSize(Number(e.target.value))}>
-              <option value={10}>10</option>
-              <option value={20}>20</option>
-              <option value={50}>50</option>
-            </select>
+            <Select
+              className="admin-history-select admin-history-select--compact"
+              classNamePrefix="admin-history-select"
+              options={[10, 20, 50].map((option) => ({ value: option, label: `${option}` }))}
+              value={[10, 20, 50].map((option) => ({ value: option, label: `${option}` })).find((option) => option.value === pageSize) || null}
+              onChange={(option) => setPageSize(Number(option?.value || 10))}
+              isSearchable={false}
+            />
           </div>
         </div>
 

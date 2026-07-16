@@ -731,3 +731,63 @@ color:#78cc28;
 font-weight:600;
 
 }
+
+@media (max-width: 1200px) {
+    .pets-grid {
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    }
+}
+
+@media (max-width: 992px) {
+    .pets-filters {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .pets-select__control {
+        min-width: 0 !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .pets-header {
+        flex-direction: column;
+    }
+
+    .add-pet-btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .pets-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .pet-card {
+        flex-direction: column;
+        gap: 16px;
+        min-height: 0;
+    }
+
+    .pet-image {
+        width: 100%;
+        max-width: 170px;
+        height: 130px;
+        border-radius: 14px;
+    }
+
+    .pet-actions {
+        width: 100%;
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+    .pet-actions button {
+        flex: 1;
+        min-width: 42px;
+    }
+
+    .pet-extra {
+        grid-template-columns: 1fr;
+    }
+}

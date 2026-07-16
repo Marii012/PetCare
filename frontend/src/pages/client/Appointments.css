@@ -1199,6 +1199,73 @@
 
 }
 
+@media (max-width: 1200px) {
+    .appointments-stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .appointment-item {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .appointment-right {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+    }
+}
+
+@media (max-width: 768px) {
+    .appointments-header {
+        flex-direction: column;
+    }
+
+    .dashboard-btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .appointments-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .appointments-filters {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .appointments-select {
+        width: 100%;
+    }
+
+    .date-filter-box {
+        min-width: 0;
+    }
+
+    .appointment-left {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 14px;
+    }
+
+    .appointment-avatar {
+        width: 74px;
+        height: 74px;
+    }
+
+    .appointment-actions {
+        width: 100%;
+    }
+
+    .appointments-container .appointment-actions .details-btn,
+    .cancel-btn {
+        flex: 1;
+        text-align: center;
+    }
+}
+
 /* ==========================================================================
    TABLETS
 ========================================================================== */

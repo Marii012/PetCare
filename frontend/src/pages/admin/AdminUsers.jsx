@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
+import { createRoot } from "react-dom/client";
 import Select from "react-select";
 import Swal from "sweetalert2";
 import api from "../../services/api";
@@ -12,6 +13,7 @@ const dateFilterOptions = [
 ];
 
 const rowsPerPageOptions = [10, 20, 50];
+const pageSizeOptions = rowsPerPageOptions.map((option) => ({ value: option, label: `${option}` }));
 
 const getFullName = (user) => `${user.first_name || ""} ${user.last_name || ""}`.trim() || "Utilizador";
 
@@ -49,6 +51,12 @@ const getInitialFormData = (user = null) => ({
 	id_role: user?.id_role ? String(user.id_role) : "1"
 });
 
+const getRoleOptions = (rolePayload = []) =>
+	(rolePayload || []).map((role) => ({
+		value: Number(role.id_role),
+		label: role.nome_role
+	}));
+
 const AdminUsers = () => {
 	const [users, setUsers] = useState([]);
 	const [roles, setRoles] = useState([]);
@@ -73,10 +81,7 @@ const AdminUsers = () => {
 
 				setUsers(usersResponse.data || []);
 
-				const roleOptions = (rolesResponse.data || []).map((role) => ({
-					value: Number(role.id_role),
-					label: role.nome_role
-				}));
+				const roleOptions = getRoleOptions(rolesResponse.data || []);
 
 				setRoles(roleOptions);
 
@@ -270,10 +275,31 @@ const AdminUsers = () => {
 		setEditRoles(Object.fromEntries((response.data || []).map((user) => [user.id_user, Number(user.id_role)])));
 	};
 
+	const loadRolesForForm = async () => {
+		try {
+			const response = await api.get("/roles");
+			const roleOptions = getRoleOptions(Array.isArray(response?.data) ? response.data : []);
+			setRoles(roleOptions);
+			return roleOptions;
+		} catch (err) {
+			console.error("Erro ao carregar perfis:", err);
+			return [];
+		}
+	};
+
 	const openUserForm = async (user = null) => {
 		const formData = getInitialFormData(user);
 		const isEditing = Boolean(user);
+		const loadedRoles = roles.length ? roles : await loadRolesForForm();
+		const roleOptions = loadedRoles.length
+			? loadedRoles
+			: [
+					{ value: 1, label: "Cliente" },
+					{ value: 2, label: "Veterinário" },
+					{ value: 3, label: "Administrador" }
+				];
 
+		const selectedRoleValue = roleOptions.find((role) => String(role.value) === String(formData.id_role)) || null;
 		const { value } = await Swal.fire({
 			title: isEditing ? "Editar utilizador" : "Adicionar utilizador",
 			html: `
@@ -302,9 +328,8 @@ const AdminUsers = () => {
 					`}
 					<label class="user-swal-field user-swal-field--full">
 						<span>Perfil</span>
-						<select id="swal-role" class="user-swal-input">
-							${roles.map((role) => `<option value="${role.value}" ${String(role.value) === String(formData.id_role) ? "selected" : ""}>${role.label}</option>`).join("")}
-						</select>
+						<div id="swal-role-picker" class="user-swal-role-picker"></div>
+						<input type="hidden" id="swal-role" value="${escapeHtml(String(formData.id_role || ""))}" />
 					</label>
 					${isEditing ? `
 					<div class="user-swal-note">
@@ -324,6 +349,31 @@ const AdminUsers = () => {
 				title: "vetlumen-swal-title",
 				htmlContainer: "vetlumen-swal-text",
 				confirmButton: "vetlumen-swal-button"
+			},
+			didOpen: () => {
+				const container = document.getElementById("swal-role-picker");
+				const hiddenInput = document.getElementById("swal-role");
+
+				if (!container) return;
+
+				const root = createRoot(container);
+				root.render(
+					<Select
+						options={roleOptions}
+						value={selectedRoleValue}
+						onChange={(option) => {
+							if (hiddenInput) {
+								hiddenInput.value = option?.value ?? "";
+							}
+						}}
+						placeholder="Selecionar perfil"
+						isSearchable
+						className="user-swal-contact-select"
+						classNamePrefix="contact-select"
+						menuPortalTarget={document.body}
+						styles={{ menuPortal: (base) => ({ ...base, zIndex: 999999 }) }}
+					/>
+				);
 			},
 			preConfirm: () => {
 				const first_name = document.getElementById("swal-first-name")?.value.trim();
@@ -534,13 +584,14 @@ const AdminUsers = () => {
 
 					<label className="users-page-size">
 						<span>Por página</span>
-						<select value={pageSize} onChange={(e) => setPageSize(Number(e.target.value))}>
-							{rowsPerPageOptions.map((option) => (
-								<option key={option} value={option}>
-									{option}
-								</option>
-							))}
-						</select>
+						<Select
+							className="users-select users-select--compact"
+							classNamePrefix="users-select"
+							options={pageSizeOptions}
+							value={pageSizeOptions.find((option) => option.value === pageSize) || null}
+							onChange={(selectedOption) => setPageSize(Number(selectedOption?.value || 10))}
+							isSearchable={false}
+						/>
 					</label>
 				</div>
 

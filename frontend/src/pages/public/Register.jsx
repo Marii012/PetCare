@@ -17,8 +17,11 @@ function Register() {
     first_name: "",
     last_name: "",
     email: "",
-    password: ""
+    password: "",
+    confirmPassword: ""
   });
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
 
 
@@ -50,6 +53,21 @@ function Register() {
 
     e.preventDefault();
 
+    if (formData.password !== formData.confirmPassword) {
+      Swal.fire({
+        title: "As palavras-passe não coincidem",
+        text: "Confirme a sua palavra-passe antes de criar a conta.",
+        icon: "warning",
+        confirmButtonText: "OK",
+        customClass: {
+          popup: "vetlumen-swal-popup",
+          title: "vetlumen-swal-title",
+          htmlContainer: "vetlumen-swal-text",
+          confirmButton: "vetlumen-swal-button"
+        }
+      });
+      return;
+    }
 
     try {
 
@@ -255,40 +273,63 @@ function Register() {
 
 
 
-                <div className="mb-4">
+                <div className="mb-3">
+                  <div className="custom-input-box p-2 px-3 d-flex align-items-center gap-2">
+                    <div className="flex-grow-1">
+                      <label className="d-block text-muted tiny-label mb-0">
+                        Password
+                      </label>
 
+                      <input
+                        type={showPassword ? "text" : "password"}
+                        name="password"
+                        value={formData.password}
+                        onChange={handleChange}
+                        className="border-0 w-100 bg-transparent form-control-clean"
+                        placeholder="••••••••"
+                        required
+                      />
+                    </div>
 
-                  <div className="custom-input-box p-2 px-3">
-
-
-                    <label className="d-block text-muted tiny-label mb-0">
-                      Password
-                    </label>
-
-
-
-
-                    <input
-                      type="password"
-                      name="password"
-                      value={formData.password}
-                      onChange={handleChange}
-                      className="border-0 w-100 bg-transparent form-control-clean"
-                      placeholder="••••••••"
-                      required
-                    />
-
-
-
+                    <button
+                      type="button"
+                      className="btn btn-link p-0 text-muted"
+                      onClick={() => setShowPassword((prev) => !prev)}
+                      aria-label={showPassword ? "Esconder password" : "Mostrar password"}
+                    >
+                      <i className={`bi ${showPassword ? "bi-eye-slash" : "bi-eye"}`}></i>
+                    </button>
                   </div>
-
-
                 </div>
 
+                <div className="mb-4">
+                  <div className="custom-input-box p-2 px-3 d-flex align-items-center gap-2">
+                    <div className="flex-grow-1">
+                      <label className="d-block text-muted tiny-label mb-0">
+                        Confirmar password
+                      </label>
 
+                      <input
+                        type={showConfirmPassword ? "text" : "password"}
+                        name="confirmPassword"
+                        value={formData.confirmPassword}
+                        onChange={handleChange}
+                        className="border-0 w-100 bg-transparent form-control-clean"
+                        placeholder="••••••••"
+                        required
+                      />
+                    </div>
 
-
-
+                    <button
+                      type="button"
+                      className="btn btn-link p-0 text-muted"
+                      onClick={() => setShowConfirmPassword((prev) => !prev)}
+                      aria-label={showConfirmPassword ? "Esconder password" : "Mostrar password"}
+                    >
+                      <i className={`bi ${showConfirmPassword ? "bi-eye-slash" : "bi-eye"}`}></i>
+                    </button>
+                  </div>
+                </div>
 
                 <div className="d-flex gap-3 align-items-center">
 

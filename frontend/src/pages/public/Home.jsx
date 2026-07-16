@@ -9,7 +9,9 @@ import "./Home.css";
 
 function Home() {
   const navigate = useNavigate();
+  const [user, setUser] = useState(null);
     const [urgencyInfo, setUrgencyInfo] = useState({
+
       label: "Atendimento disponível",
       icon: "bi-heart-pulse",
       className: "urgency-normal",
@@ -123,6 +125,54 @@ function Home() {
     nome_animal: "",
     mensagem: ""
   });
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const storedUser = localStorage.getItem("user");
+
+    if (token && storedUser) {
+      setUser(JSON.parse(storedUser));
+    } else {
+      setUser(null);
+    }
+  }, []);
+
+  const handleAppointmentClick = () => {
+    if (!user) {
+      navigate("/login");
+      return;
+    }
+
+    switch (user.id_role) {
+      case 1:
+        navigate("/client/appointments/book");
+        break;
+      case 2:
+        navigate("/vet/dashboard");
+        break;
+      case 3:
+        navigate("/admin/dashboard");
+        break;
+      default:
+        navigate("/login");
+    }
+  };
+
+  const getAppointmentButtonText = () => {
+    if (!user) {
+      return "Marcar Consulta";
+    }
+
+    switch (user.id_role) {
+      case 1:
+        return "Marcar Consulta";
+      case 2:
+      case 3:
+        return "Ir para o Painel";
+      default:
+        return "Marcar Consulta";
+    }
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -288,9 +338,9 @@ function Home() {
               <p className="text-muted mb-4 lead font-light fs-6">
                 Marque consultas veterinárias de forma simples, rápida e segura. A nossa equipa está preparada para cuidar da saúde e do bem-estar do seu melhor amigo!
               </p>
-              <button className="btn btn-hero btn-lg px-4 py-2.5 rounded-pill text-white fw-medium shadow-sm" onClick={() => navigate("/client/appointments/book")}>
+              <button className="btn btn-hero btn-lg px-4 py-2.5 rounded-pill text-white fw-medium shadow-sm" onClick={handleAppointmentClick}>
                 <i className="bi bi-calendar-plus me-2"></i>
-                Marcar Consulta
+                {getAppointmentButtonText()}
               </button>
             </div>
 

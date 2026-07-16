@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import Select from "react-select";
 import api from "../../services/api";
 import "./AdminMarkins.css";
 
@@ -90,6 +92,7 @@ const getInitialFormData = (appointment = null) => ({
 });
 
 const AdminAppointments = () => {
+	const navigate = useNavigate();
 	const [appointments, setAppointments] = useState([]);
 	const [pets, setPets] = useState([]);
 	const [users, setUsers] = useState([]);
@@ -446,7 +449,7 @@ const AdminAppointments = () => {
 					<p>Consulte, crie, edite e elimine todas as marcações do sistema.</p>
 				</div>
 
-				<button className="dashboard-btn markings-add-btn" onClick={() => openAppointmentForm()}>
+				<button className="dashboard-btn markings-add-btn" onClick={() => navigate("/admin/appointments/add")}>
 					<i className="bi bi-plus-lg"></i>
 					Nova marcação
 				</button>
@@ -488,20 +491,26 @@ const AdminAppointments = () => {
 
 					<label className="markings-select-field">
 						<span>Estado</span>
-						<select value={statusFilter.value} onChange={(event) => setStatusFilter(statusOptions.find((option) => option.value === event.target.value) || statusOptions[0])}>
-							{statusOptions.map((option) => (
-								<option key={option.value} value={option.value}>{option.label}</option>
-							))}
-						</select>
+						<Select
+							className="admin-markings-select"
+							classNamePrefix="admin-markings-select"
+							options={statusOptions}
+							value={statusFilter}
+							onChange={(option) => setStatusFilter(option || statusOptions[0])}
+							isSearchable={false}
+						/>
 					</label>
 
 					<label className="markings-select-field">
 						<span>Filtro de data</span>
-						<select value={dateFilter.value} onChange={(event) => setDateFilter(dateFilterOptions.find((option) => option.value === event.target.value) || dateFilterOptions[0])}>
-							{dateFilterOptions.map((option) => (
-								<option key={option.value} value={option.value}>{option.label}</option>
-							))}
-						</select>
+						<Select
+							className="admin-markings-select"
+							classNamePrefix="admin-markings-select"
+							options={dateFilterOptions}
+							value={dateFilter}
+							onChange={(option) => setDateFilter(option || dateFilterOptions[0])}
+							isSearchable={false}
+						/>
 					</label>
 
 					<label className="markings-select-field">
@@ -511,11 +520,14 @@ const AdminAppointments = () => {
 
 					<label className="markings-page-size">
 						<span>Por página</span>
-						<select value={pageSize} onChange={(event) => setPageSize(Number(event.target.value))}>
-							{rowsPerPageOptions.map((option) => (
-								<option key={option} value={option}>{option}</option>
-							))}
-						</select>
+						<Select
+							className="admin-markings-select admin-markings-select--compact"
+							classNamePrefix="admin-markings-select"
+							options={rowsPerPageOptions.map((option) => ({ value: option, label: `${option}` }))}
+							value={rowsPerPageOptions.map((option) => ({ value: option, label: `${option}` })).find((option) => option.value === pageSize) || null}
+							onChange={(option) => setPageSize(Number(option?.value || 10))}
+							isSearchable={false}
+						/>
 					</label>
 				</div>
 

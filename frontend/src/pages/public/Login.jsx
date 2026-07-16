@@ -17,6 +17,7 @@ function Login() {
     email: "",
     password: ""
   });
+  const [showPassword, setShowPassword] = useState(false);
 
 
   useEffect(() => {
@@ -189,25 +190,31 @@ function Login() {
 
                 <div className="mb-4">
 
-                  <div className="custom-input-box p-2 px-3">
+                  <div className="custom-input-box p-2 px-3 d-flex align-items-center gap-2">
+                    <div className="flex-grow-1">
+                      <label className="text-muted tiny-label mb-0">
+                        Password
+                      </label>
 
+                      <input
+                        type={showPassword ? "text" : "password"}
+                        name="password"
+                        value={formData.password}
+                        onChange={handleChange}
+                        className="border-0 w-100 bg-transparent form-control-clean"
+                        placeholder="••••••••"
+                        required
+                      />
+                    </div>
 
-                    <label className="text-muted tiny-label mb-0">
-                      Password
-                    </label>
-
-
-                    <input
-                      type="password"
-                      name="password"
-                      value={formData.password}
-                      onChange={handleChange}
-                      className="border-0 w-100 bg-transparent form-control-clean"
-                      placeholder="••••••••"
-                      required
-                    />
-
-
+                    <button
+                      type="button"
+                      className="btn btn-link p-0 text-muted"
+                      onClick={() => setShowPassword((prev) => !prev)}
+                      aria-label={showPassword ? "Esconder password" : "Mostrar password"}
+                    >
+                      <i className={`bi ${showPassword ? "bi-eye-slash" : "bi-eye"}`}></i>
+                    </button>
                   </div>
 
                 </div>

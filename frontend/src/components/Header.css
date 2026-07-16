@@ -97,6 +97,18 @@ header {
 }
 
 @media (max-width: 991.98px) {
+  .navbar-toggler.hamburger {
+    position: relative;
+    z-index: 1061;
+  }
+
+  .navbar-toggler.hamburger.active {
+    position: fixed;
+    top: 22px;
+    right: 18px;
+    z-index: 1061;
+  }
+
   .mobile-menu-overlay {
     position: fixed;
     inset: 0;

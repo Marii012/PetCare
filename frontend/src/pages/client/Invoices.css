@@ -442,42 +442,28 @@ outline:none;
 	color:#fff!important;
 }
 
-/* Reuse search-box styles from Appointments for consistent search UI */
-.invoices-container .details-btn{
-	flex:1;
-border:1px solid #78cc28;
-	align-items:center;
-background:#ffffff;
-	height:54px;
-padding:11px 20px;
-	background:#fff;
-	border:1px solid #e2e8f0;
-	border-radius:16px;
-color:#3f6212;
+.search-box{
+	flex: 1;
+	min-width: 260px;
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	height: 54px;
+	padding: 0 18px;
+	background: #fff;
+	border: 1px solid #e2e8f0;
+	border-radius: 16px;
+	transition: .25s;
+}
 
-font-weight:600;
-
-	transition:.25s;
+.search-box i{
+	font-size: 1rem;
+	color: #94a3b8;
 }
 
 .search-box:focus-within{
 	border-color:#78cc28;
-	box-shadow:0 0 0 4px rgba(120,204,40,0.12);
-.invoices-container .details-btn:hover,
-.invoices-container .details-btn:focus,
-.invoices-container .details-btn:focus-visible{
-
-background:#f7fff1;
-	color:#94a3b8;
-color:#3f6212;
-
-border-color:#3f6212;
-
-transform:none;
-
-box-shadow:none;
-
-outline:none;
+	box-shadow:0 0 0 4px rgba(120,204,40,.12);
 }
 
 .search-box input{
@@ -491,4 +477,48 @@ outline:none;
 
 .search-box input::placeholder{
 	color:#94a3b8;
-}}
+}
+
+@media (max-width: 1200px) {
+	.invoice-stats {
+		grid-template-columns: 1fr;
+	}
+
+	.invoice-card {
+		flex-direction: column;
+		align-items: flex-start;
+	}
+
+	.invoice-right {
+		width: 100%;
+		flex-direction: row;
+		align-items: center;
+		justify-content: space-between;
+		flex-wrap: wrap;
+	}
+}
+
+@media (max-width: 768px) {
+	.invoices-header h1 {
+		font-size: 1.6rem;
+	}
+
+	.invoices-filters {
+		flex-direction: column;
+		align-items: stretch;
+	}
+
+	.search-box,
+	.invoice-select__control {
+		min-width: 0;
+		width: 100%;
+	}
+
+	.invoice-items {
+		flex-wrap: wrap;
+	}
+
+	.invoices-container .details-btn {
+		width: 100%;
+	}
+}

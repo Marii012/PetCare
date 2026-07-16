@@ -1,0 +1,144 @@
+.admin-add-appointment-page .admin-appointment-form-card {
+  padding: 24px;
+}
+
+.admin-add-appointment-page .admin-appointment-form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(260px, 1fr));
+  gap: 16px 20px;
+}
+
+.admin-add-appointment-page .admin-appointment-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.admin-add-appointment-page .admin-appointment-field span {
+  color: #475569;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.admin-add-appointment-page .admin-appointment-input {
+  min-height: 48px;
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  padding: 10px 12px;
+  font-size: 0.95rem;
+  color: #0f172a;
+  background: #fff;
+  outline: none;
+}
+
+.admin-add-appointment-page .admin-appointment-input:focus {
+  border-color: #78cc28;
+  box-shadow: 0 0 0 3px rgba(120, 204, 40, 0.14);
+}
+
+.admin-add-appointment-page .admin-appointment-textarea {
+  min-height: 92px;
+  resize: vertical;
+}
+
+.admin-add-appointment-page .admin-appointment-field--full {
+  grid-column: 1 / -1;
+}
+
+.admin-add-appointment-page .admin-appointment-form-error {
+  grid-column: 1 / -1;
+  margin: 0;
+  color: #dc2626;
+  font-weight: 600;
+}
+
+.admin-add-appointment-page .admin-appointment-form-actions {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.admin-add-appointment-page .admin-appointment-cancel {
+  background: #e2e8f0;
+  color: #334155;
+}
+
+.admin-add-appointment-page .admin-appointment-cancel:hover {
+  background: #cbd5e1;
+  box-shadow: none;
+  transform: none;
+}
+
+.admin-add-appointment-page .admin-appointment-form-message {
+  margin: 0;
+  color: #475569;
+  font-weight: 600;
+}
+
+.admin-add-appointment-page .admin-appointment-select .admin-appointment-select__control {
+  min-height: 48px;
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  box-shadow: none;
+  transition: 0.2s;
+  background: #fff;
+}
+
+.admin-add-appointment-page .admin-appointment-select .admin-appointment-select__control:hover {
+  border-color: #78cc28;
+}
+
+.admin-add-appointment-page .admin-appointment-select .admin-appointment-select__control--is-focused {
+  border-color: #78cc28;
+  box-shadow: 0 0 0 3px rgba(120, 204, 40, 0.14);
+}
+
+.admin-add-appointment-page .admin-appointment-select .admin-appointment-select__indicator-separator {
+  display: none;
+}
+
+.admin-add-appointment-page .admin-appointment-select .admin-appointment-select__menu {
+  border-radius: 12px;
+  overflow: hidden;
+  margin-top: 6px;
+}
+
+.admin-add-appointment-page .admin-appointment-select .admin-appointment-select__menu-list {
+  max-height: 220px;
+  padding: 0;
+}
+
+.admin-add-appointment-page .admin-appointment-select .admin-appointment-select__option {
+  padding: 10px 12px;
+  cursor: pointer;
+}
+
+.admin-add-appointment-page .admin-appointment-select .admin-appointment-select__option--is-focused {
+  background: #f5f5f5;
+  color: #333;
+}
+
+.admin-add-appointment-page .admin-appointment-select .admin-appointment-select__option--is-selected {
+  background: #78cc28;
+  color: #fff;
+}
+
+.admin-add-appointment-page .admin-appointment-select .admin-appointment-select__placeholder {
+  color: #6c757d;
+}
+
+.admin-add-appointment-page .admin-appointment-select .admin-appointment-select__single-value {
+  color: #0f172a;
+}
+
+@media (max-width: 992px) {
+  .admin-add-appointment-page .admin-appointment-form {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-add-appointment-page .admin-appointment-form-actions {
+    flex-direction: column-reverse;
+    align-items: stretch;
+  }
+}

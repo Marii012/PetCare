@@ -184,3 +184,20 @@ textarea.clinical-input {
     align-items: stretch;
   }
 }
+
+@media (max-width: 576px) {
+  .clinical-page {
+    padding: 20px;
+  }
+
+  .clinical-header h1 {
+    font-size: 1.45rem;
+  }
+
+  .clinical-back-btn,
+  .clinical-cancel-btn,
+  .clinical-save-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}

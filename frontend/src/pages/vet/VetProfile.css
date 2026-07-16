@@ -267,3 +267,57 @@
     color:#78cc28;
 
 }
+
+@media (max-width: 1100px) {
+    .profile-card {
+        flex-direction: column;
+        gap: 28px;
+    }
+
+    .profile-avatar-section {
+        width: 100%;
+    }
+
+    .profile-details,
+    .profile-edit-form,
+    .password-form {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .profile-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .edit-profile-btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .profile-card,
+    .profile-security {
+        padding: 20px;
+        border-radius: 18px;
+    }
+
+    .profile-avatar {
+        width: 130px;
+        height: 130px;
+    }
+
+    .profile-avatar-icon {
+        font-size: 62px;
+    }
+
+    .profile-name {
+        font-size: 1.4rem;
+    }
+
+    .profile-edit-actions {
+        justify-content: stretch;
+        flex-direction: column-reverse;
+    }
+}

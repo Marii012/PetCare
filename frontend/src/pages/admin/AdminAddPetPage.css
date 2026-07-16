@@ -1,0 +1,155 @@
+.admin-add-pet-page .admin-pet-form-card {
+  padding: 24px;
+}
+
+.admin-add-pet-page .admin-pet-form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(260px, 1fr));
+  gap: 16px 20px;
+}
+
+.admin-add-pet-page .admin-pet-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.admin-add-pet-page .admin-pet-field span {
+  color: #475569;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.admin-add-pet-page .admin-pet-input {
+  min-height: 48px;
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  padding: 10px 12px;
+  font-size: 0.95rem;
+  color: #0f172a;
+  background: #fff;
+  outline: none;
+}
+
+.admin-add-pet-page .admin-pet-input:focus {
+  border-color: #78cc28;
+  box-shadow: 0 0 0 3px rgba(120, 204, 40, 0.14);
+}
+
+.admin-add-pet-page .admin-pet-textarea {
+  min-height: 96px;
+  resize: vertical;
+}
+
+.admin-add-pet-page .admin-pet-field--full {
+  grid-column: 1 / -1;
+}
+
+.admin-add-pet-page .admin-pet-checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.admin-add-pet-page .admin-pet-checkbox input {
+  width: 18px;
+  height: 18px;
+}
+
+.admin-add-pet-page .admin-pet-form-error {
+  grid-column: 1 / -1;
+  margin: 0;
+  color: #dc2626;
+  font-weight: 600;
+}
+
+.admin-add-pet-page .admin-pet-form-actions {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.admin-add-pet-page .admin-pet-cancel {
+  background: #e2e8f0;
+  color: #334155;
+}
+
+.admin-add-pet-page .admin-pet-cancel:hover {
+  background: #cbd5e1;
+  box-shadow: none;
+  transform: none;
+}
+
+.admin-add-pet-page .admin-pet-form-message {
+  margin: 0;
+  color: #475569;
+  font-weight: 600;
+}
+
+.admin-add-pet-page .admin-pet-select .admin-pet-select__control {
+  min-height: 48px;
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  box-shadow: none;
+  transition: 0.2s;
+  background: #fff;
+}
+
+.admin-add-pet-page .admin-pet-select .admin-pet-select__control:hover {
+  border-color: #78cc28;
+}
+
+.admin-add-pet-page .admin-pet-select .admin-pet-select__control--is-focused {
+  border-color: #78cc28;
+  box-shadow: 0 0 0 3px rgba(120, 204, 40, 0.14);
+}
+
+.admin-add-pet-page .admin-pet-select .admin-pet-select__indicator-separator {
+  display: none;
+}
+
+.admin-add-pet-page .admin-pet-select .admin-pet-select__menu {
+  border-radius: 12px;
+  overflow: hidden;
+  margin-top: 6px;
+}
+
+.admin-add-pet-page .admin-pet-select .admin-pet-select__menu-list {
+  max-height: 220px;
+  padding: 0;
+}
+
+.admin-add-pet-page .admin-pet-select .admin-pet-select__option {
+  padding: 10px 12px;
+  cursor: pointer;
+}
+
+.admin-add-pet-page .admin-pet-select .admin-pet-select__option--is-focused {
+  background: #f5f5f5;
+  color: #333;
+}
+
+.admin-add-pet-page .admin-pet-select .admin-pet-select__option--is-selected {
+  background: #78cc28;
+  color: #fff;
+}
+
+.admin-add-pet-page .admin-pet-select .admin-pet-select__placeholder {
+  color: #6c757d;
+}
+
+.admin-add-pet-page .admin-pet-select .admin-pet-select__single-value {
+  color: #0f172a;
+}
+
+@media (max-width: 992px) {
+  .admin-add-pet-page .admin-pet-form {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-add-pet-page .admin-pet-form-actions {
+    flex-direction: column-reverse;
+    align-items: stretch;
+  }
+}

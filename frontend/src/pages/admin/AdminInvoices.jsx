@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { createRoot } from "react-dom/client";
 import { createPortal } from "react-dom";
 import Select from "react-select";
@@ -65,6 +66,7 @@ const getInitialFormData = (invoice = null) => ({
 });
 
 const AdminInvoices = () => {
+	const navigate = useNavigate();
 	const [invoices, setInvoices] = useState([]);
 	const [users, setUsers] = useState([]);
 	const [appointments, setAppointments] = useState([]);
@@ -459,7 +461,7 @@ const AdminInvoices = () => {
 					<p>Gira a faturação e associe cada fatura ao utilizador correspondente.</p>
 				</div>
 
-				<button className="dashboard-btn invoices-add-btn" onClick={() => openInvoiceForm()}>
+				<button className="dashboard-btn invoices-add-btn" onClick={() => navigate("/admin/invoices/add")}>
 					<i className="bi bi-plus-lg"></i>
 					Nova fatura
 				</button>
@@ -504,14 +506,17 @@ const AdminInvoices = () => {
 
 					<label className="invoices-select-field">
 						<span>Estado</span>
-						<select value={statusFilter.value} onChange={(event) => {
-							setCurrentPage(1);
-							setStatusFilter(paymentOptions.find((option) => option.value === event.target.value) || paymentOptions[0]);
-						}}>
-							{paymentOptions.map((option) => (
-								<option key={option.value} value={option.value}>{option.label}</option>
-							))}
-						</select>
+						<Select
+							className="admin-invoices-select"
+							classNamePrefix="admin-invoices-select"
+							options={paymentOptions}
+							value={statusFilter}
+							onChange={(option) => {
+								setCurrentPage(1);
+								setStatusFilter(option || paymentOptions[0]);
+							}}
+							isSearchable={false}
+						/>
 					</label>
 
 					<label className="invoices-select-field">
@@ -524,14 +529,17 @@ const AdminInvoices = () => {
 
 					<label className="invoices-page-size">
 						<span>Por página</span>
-						<select value={pageSize} onChange={(event) => {
-							setCurrentPage(1);
-							setPageSize(Number(event.target.value));
-						}}>
-							{rowsPerPageOptions.map((option) => (
-								<option key={option} value={option}>{option}</option>
-							))}
-						</select>
+						<Select
+							className="admin-invoices-select admin-invoices-select--compact"
+							classNamePrefix="admin-invoices-select"
+							options={rowsPerPageOptions.map((option) => ({ value: option, label: `${option}` }))}
+							value={rowsPerPageOptions.map((option) => ({ value: option, label: `${option}` })).find((option) => option.value === pageSize) || null}
+							onChange={(option) => {
+								setCurrentPage(1);
+								setPageSize(Number(option?.value || 10));
+							}}
+							isSearchable={false}
+						/>
 					</label>
 				</div>
 

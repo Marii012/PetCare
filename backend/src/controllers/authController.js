@@ -169,13 +169,6 @@ const authController = {
         });
       }
 
-      if (newPassword.length < 6) {
-        return res.status(400).json({
-          error: 'Palavra-passe fraca.',
-          message: 'A nova palavra-passe deve ter pelo menos 6 caracteres.'
-        });
-      }
-
       const user = await User.findByPk(userId);
       if (!user) {
         return res.status(404).json({

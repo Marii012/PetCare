@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import Select from "react-select";
 import api from "../../services/api";
 import "./AdminPets.css";
 
@@ -60,6 +62,7 @@ const getInitialFormData = (pet = null) => ({
 });
 
 const AdminPets = () => {
+	const navigate = useNavigate();
 	const [pets, setPets] = useState([]);
 	const [users, setUsers] = useState([]);
 	const [species, setSpecies] = useState([]);
@@ -172,24 +175,24 @@ const AdminPets = () => {
 		setSearch(event.target.value);
 	};
 
-	const handleSpeciesFilterChange = (event) => {
+	const handleSpeciesFilterChange = (selectedOption) => {
 		setCurrentPage(1);
-		setSpeciesFilter(speciesOptions.find((item) => item.value === event.target.value) || speciesOptions[0]);
+		setSpeciesFilter(selectedOption || speciesOptions[0]);
 	};
 
-	const handleSexFilterChange = (event) => {
+	const handleSexFilterChange = (selectedOption) => {
 		setCurrentPage(1);
-		setSexFilter(sexFilterOptions.find((item) => item.value === event.target.value) || sexFilterOptions[0]);
+		setSexFilter(selectedOption || sexFilterOptions[0]);
 	};
 
-	const handleStateFilterChange = (event) => {
+	const handleStateFilterChange = (selectedOption) => {
 		setCurrentPage(1);
-		setStateFilter(stateFilterOptions.find((item) => item.value === event.target.value) || stateFilterOptions[0]);
+		setStateFilter(selectedOption || stateFilterOptions[0]);
 	};
 
-	const handlePageSizeChange = (event) => {
+	const handlePageSizeChange = (selectedOption) => {
 		setCurrentPage(1);
-		setPageSize(Number(event.target.value));
+		setPageSize(Number(selectedOption?.value || 10));
 	};
 
 	const updateBreedOptions = (popup, speciesId, selectedBreedId = "") => {
@@ -463,7 +466,7 @@ const AdminPets = () => {
 					<p>Consulte, crie, edite e elimine a lista de animais do sistema.</p>
 				</div>
 
-				<button className="dashboard-btn pets-add-btn" onClick={() => openPetForm()}>
+				<button className="dashboard-btn pets-add-btn" onClick={() => navigate("/admin/pets/add")}>
 					<i className="bi bi-plus-lg"></i>
 					Adicionar animal
 				</button>
@@ -520,46 +523,50 @@ const AdminPets = () => {
 
 					<label className="pets-select-field">
 						<span>Espécie</span>
-						<select value={speciesFilter.value} onChange={handleSpeciesFilterChange}>
-							{speciesOptions.map((option) => (
-								<option key={option.value} value={option.value}>
-									{option.label}
-								</option>
-							))}
-						</select>
+						<Select
+							className="admin-pets-select"
+							classNamePrefix="admin-pets-select"
+							options={speciesOptions}
+							value={speciesFilter}
+							onChange={handleSpeciesFilterChange}
+							isSearchable={false}
+						/>
 					</label>
 
 					<label className="pets-select-field">
 						<span>Sexo</span>
-						<select value={sexFilter.value} onChange={handleSexFilterChange}>
-							{sexFilterOptions.map((option) => (
-								<option key={option.value} value={option.value}>
-									{option.label}
-								</option>
-							))}
-						</select>
+						<Select
+							className="admin-pets-select"
+							classNamePrefix="admin-pets-select"
+							options={sexFilterOptions}
+							value={sexFilter}
+							onChange={handleSexFilterChange}
+							isSearchable={false}
+						/>
 					</label>
 
 					<label className="pets-select-field">
 						<span>Estado</span>
-						<select value={stateFilter.value} onChange={handleStateFilterChange}>
-							{stateFilterOptions.map((option) => (
-								<option key={option.value} value={option.value}>
-									{option.label}
-								</option>
-							))}
-						</select>
+						<Select
+							className="admin-pets-select"
+							classNamePrefix="admin-pets-select"
+							options={stateFilterOptions}
+							value={stateFilter}
+							onChange={handleStateFilterChange}
+							isSearchable={false}
+						/>
 					</label>
 
 					<label className="pets-page-size">
 						<span>Por página</span>
-						<select value={pageSize} onChange={handlePageSizeChange}>
-							{rowsPerPageOptions.map((option) => (
-								<option key={option} value={option}>
-									{option}
-								</option>
-							))}
-						</select>
+						<Select
+							className="admin-pets-select"
+							classNamePrefix="admin-pets-select"
+							options={rowsPerPageOptions.map((option) => ({ value: option, label: `${option}` }))}
+							value={rowsPerPageOptions.map((option) => ({ value: option, label: `${option}` })).find((option) => option.value === pageSize) || null}
+							onChange={handlePageSizeChange}
+							isSearchable={false}
+						/>
 					</label>
 				</div>
 

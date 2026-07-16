@@ -12,3 +12,36 @@
     overflow-y: auto;
     padding: 40px;
 }
+
+@media (max-width: 992px) {
+    .dashboard-layout {
+        height: auto;
+        min-height: 100vh;
+    }
+
+    .dashboard-content {
+        border-radius: 0;
+        padding: 84px 24px 24px;
+    }
+
+    .dashboard-content .dashboard-container,
+    .dashboard-content .appointments-container,
+    .dashboard-content .invoices-container,
+    .dashboard-content .pets-container,
+    .dashboard-content .profile-container,
+    .dashboard-content .history-container,
+    .dashboard-content .vaccines-container,
+    .dashboard-content .pet-details-container,
+    .dashboard-content .medical-history-container,
+    .dashboard-content .clinical-page {
+        margin-left: 0 !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+}
+
+@media (max-width: 576px) {
+    .dashboard-content {
+        padding: 78px 16px 16px;
+    }
+}

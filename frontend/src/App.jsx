@@ -38,8 +38,11 @@ import AdminHistory from "./pages/admin/AdminHistory";
 import AdminProfile from "./pages/admin/AdminProfile";
 import AdminUsers from "./pages/admin/AdminUsers";
 import AdminPets from "./pages/admin/AdminPets";
+import AdminAddPetPage from "./pages/admin/AdminAddPetPage";
 import AdminAppointments from "./pages/admin/AdminMarkings";
+import AdminAddAppointmentPage from "./pages/admin/AdminAddAppointmentPage";
 import AdminInvoices from "./pages/admin/AdminInvoices";
+import AdminAddInvoicePage from "./pages/admin/AdminAddInvoicePage";
 import AdminServices from "./pages/admin/AdminServices";
 
 function App() {
@@ -97,9 +100,12 @@ function App() {
           <Route path="/admin/profile" element={<AdminProfile />} />
           <Route path="/admin/users" element={<AdminUsers />} />
           <Route path="/admin/pets" element={<AdminPets />} />
+          <Route path="/admin/pets/add" element={<AdminAddPetPage />} />
           <Route path="/admin/appointments" element={<AdminAppointments />} />
+          <Route path="/admin/appointments/add" element={<AdminAddAppointmentPage />} />
           <Route path="/admin/services" element={<AdminServices />} />
           <Route path="/admin/invoices" element={<AdminInvoices />} />
+          <Route path="/admin/invoices/add" element={<AdminAddInvoicePage />} />
         </Route>
       </Routes>
 

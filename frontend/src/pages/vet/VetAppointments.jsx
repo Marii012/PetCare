@@ -587,18 +587,15 @@ const VetAppointments = () => {
 
           <label className="appointments-inline-select appointments-inline-select--rows">
             <span>Mostrar</span>
-            <select
-              className="appointments-native-select"
-              value={rowsPerPage}
-              onChange={(e) => setRowsPerPage(Number(e.target.value))}
+            <Select
+              className="appointments-select appointments-select--compact"
+              classNamePrefix="appointments-select"
+              options={rowsPerPageOptions.map((value) => ({ value, label: `${value} por página` }))}
+              value={rowsPerPageOptions.map((value) => ({ value, label: `${value} por página` })).find((option) => option.value === rowsPerPage) || null}
+              onChange={(option) => setRowsPerPage(Number(option?.value || 10))}
+              isSearchable={false}
               aria-label="Quantidade de consultas por página"
-            >
-              {rowsPerPageOptions.map((value) => (
-                <option key={value} value={value}>
-                  {value} por página
-                </option>
-              ))}
-            </select>
+            />
           </label>
 
         </div>

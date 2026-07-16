@@ -341,32 +341,32 @@ const AdminServices = () => {
 
 					<label className="services-select-field">
 						<span>Estado</span>
-						<select
-							value={statusFilter.value}
-							onChange={(event) => {
+						<Select
+							className="admin-services-select"
+							classNamePrefix="admin-services-select"
+							options={statusOptions}
+							value={statusFilter}
+							onChange={(option) => {
 								setCurrentPage(1);
-								setStatusFilter(statusOptions.find((option) => option.value === event.target.value) || statusOptions[0]);
+								setStatusFilter(option || statusOptions[0]);
 							}}
-						>
-							{statusOptions.map((option) => (
-								<option key={option.value} value={option.value}>{option.label}</option>
-							))}
-						</select>
+							isSearchable={false}
+						/>
 					</label>
 
 					<label className="services-page-size">
 						<span>Por página</span>
-						<select
-							value={pageSize}
-							onChange={(event) => {
+						<Select
+							className="admin-services-select admin-services-select--compact"
+							classNamePrefix="admin-services-select"
+							options={rowsPerPageOptions.map((option) => ({ value: option, label: `${option}` }))}
+							value={rowsPerPageOptions.map((option) => ({ value: option, label: `${option}` })).find((option) => option.value === pageSize) || null}
+							onChange={(option) => {
 								setCurrentPage(1);
-								setPageSize(Number(event.target.value));
+								setPageSize(Number(option?.value || 10));
 							}}
-						>
-							{rowsPerPageOptions.map((option) => (
-								<option key={option} value={option}>{option}</option>
-							))}
-						</select>
+							isSearchable={false}
+						/>
 					</label>
 				</div>
 

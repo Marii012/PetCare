@@ -28,6 +28,9 @@ const Profile = () => {
     newPassword: "",
     confirmPassword: "",
   });
+  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [formData, setFormData] = useState({
     first_name: "",
     last_name: "",
@@ -330,38 +333,68 @@ const Profile = () => {
               <form className="password-form" onSubmit={handlePasswordSubmit}>
                 <div className="profile-item">
                   <label htmlFor="currentPassword">Palavra-passe atual</label>
-                  <input
-                    id="currentPassword"
-                    name="currentPassword"
-                    type="password"
-                    value={passwordForm.currentPassword}
-                    onChange={handlePasswordChange}
-                    className="profile-input"
-                  />
+                  <div className="d-flex align-items-center gap-2">
+                    <input
+                      id="currentPassword"
+                      name="currentPassword"
+                      type={showCurrentPassword ? "text" : "password"}
+                      value={passwordForm.currentPassword}
+                      onChange={handlePasswordChange}
+                      className="profile-input flex-grow-1"
+                    />
+                    <button
+                      type="button"
+                      className="btn btn-link p-0 text-muted"
+                      onClick={() => setShowCurrentPassword((prev) => !prev)}
+                      aria-label={showCurrentPassword ? "Esconder password" : "Mostrar password"}
+                    >
+                      <i className={`bi ${showCurrentPassword ? "bi-eye-slash" : "bi-eye"}`}></i>
+                    </button>
+                  </div>
                 </div>
 
                 <div className="profile-item">
                   <label htmlFor="newPassword">Nova palavra-passe</label>
-                  <input
-                    id="newPassword"
-                    name="newPassword"
-                    type="password"
-                    value={passwordForm.newPassword}
-                    onChange={handlePasswordChange}
-                    className="profile-input"
-                  />
+                  <div className="d-flex align-items-center gap-2">
+                    <input
+                      id="newPassword"
+                      name="newPassword"
+                      type={showNewPassword ? "text" : "password"}
+                      value={passwordForm.newPassword}
+                      onChange={handlePasswordChange}
+                      className="profile-input flex-grow-1"
+                    />
+                    <button
+                      type="button"
+                      className="btn btn-link p-0 text-muted"
+                      onClick={() => setShowNewPassword((prev) => !prev)}
+                      aria-label={showNewPassword ? "Esconder password" : "Mostrar password"}
+                    >
+                      <i className={`bi ${showNewPassword ? "bi-eye-slash" : "bi-eye"}`}></i>
+                    </button>
+                  </div>
                 </div>
 
                 <div className="profile-item">
                   <label htmlFor="confirmPassword">Confirmar palavra-passe</label>
-                  <input
-                    id="confirmPassword"
-                    name="confirmPassword"
-                    type="password"
-                    value={passwordForm.confirmPassword}
-                    onChange={handlePasswordChange}
-                    className="profile-input"
-                  />
+                  <div className="d-flex align-items-center gap-2">
+                    <input
+                      id="confirmPassword"
+                      name="confirmPassword"
+                      type={showConfirmPassword ? "text" : "password"}
+                      value={passwordForm.confirmPassword}
+                      onChange={handlePasswordChange}
+                      className="profile-input flex-grow-1"
+                    />
+                    <button
+                      type="button"
+                      className="btn btn-link p-0 text-muted"
+                      onClick={() => setShowConfirmPassword((prev) => !prev)}
+                      aria-label={showConfirmPassword ? "Esconder password" : "Mostrar password"}
+                    >
+                      <i className={`bi ${showConfirmPassword ? "bi-eye-slash" : "bi-eye"}`}></i>
+                    </button>
+                  </div>
                 </div>
 
                 <div className="profile-edit-actions">
