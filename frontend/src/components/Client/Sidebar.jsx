@@ -136,7 +136,7 @@ const Sidebar = () => {
                       onClick={closeMenu}
                     >
                       <i className="bi bi-grid-1x2-fill me-3"></i>
-                      Resumo
+                      Painel
                     </NavLink>
 
                     <NavLink

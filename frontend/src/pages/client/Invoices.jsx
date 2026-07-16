@@ -277,6 +277,10 @@ const Invoices = () => {
         {loading && <p>A carregar faturas...</p>}
         {error && <p>{error}</p>}
 
+        {!loading && !error && filteredInvoices.length === 0 && (
+          <p>Nenhuma fatura encontrada.</p>
+        )}
+
         {!loading && !error && filteredInvoices.map((invoice) => (
           <div className="invoice-card" key={invoice.id_invoice}>
             <div className="invoice-icon">

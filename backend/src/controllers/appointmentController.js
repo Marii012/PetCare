@@ -3,8 +3,9 @@ const Pet = require('../models/petModel');
 const User = require('../models/userModel');
 const Service = require('../models/serviceModel');
 
-
 const allowedAppointmentStatuses = ['Pendente', 'Confirmada', 'Concluída', 'Cancelada'];
+
+const isClientUser = (user) => Number(user?.id_role) === 1;
 
 const normalizeAppointmentStatus = (status) => {
   if (!status) {
@@ -28,8 +29,31 @@ const appointmentController = {
   // LISTAR TODAS AS CONSULTAS
   getAllAppointments: async (req, res) => {
     try {
+      if (!req.user) {
+        return res.status(401).json({
+          error: 'Token não fornecido.'
+        });
+      }
+
+      const where = {};
+
+      if (isClientUser(req.user)) {
+        const userPets = await Pet.findAll({
+          where: { id_user: req.user.id_user },
+          attributes: ['id_pet']
+        });
+
+        const petIds = userPets.map((pet) => pet.id_pet);
+
+        if (petIds.length === 0) {
+          return res.status(200).json([]);
+        }
+
+        where.id_pet = petIds;
+      }
 
       const appointments = await Appointment.findAll({
+        where,
         order: [
           ['data', 'ASC'],
           ['hora', 'ASC']
@@ -67,6 +91,17 @@ const appointmentController = {
         });
       }
 
+      if (isClientUser(req.user)) {
+        const pet = await Pet.findByPk(appointment.id_pet);
+
+        if (!pet || pet.id_user !== req.user.id_user) {
+          return res.status(403).json({
+            error: 'Acesso negado.',
+            message: 'Não tens permissão para visualizar esta consulta.'
+          });
+        }
+      }
+
 
       return res.status(200).json(appointment);
 
@@ -98,6 +133,13 @@ const appointmentController = {
         return res.status(404).json({
           error: 'Pet não encontrado.',
           message: 'O pet indicado não existe.'
+        });
+      }
+
+      if (isClientUser(req.user) && pet.id_user !== req.user.id_user) {
+        return res.status(403).json({
+          error: 'Acesso negado.',
+          message: 'Não tens permissão para visualizar as consultas deste pet.'
         });
       }
 

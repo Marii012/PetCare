@@ -63,11 +63,29 @@ const Appointments = () => {
     const loadAppointments = async () => {
       try {
         setLoading(true);
-        const response = await api.get("/appointments");
-        const appointmentsData = response.data || [];
+
+        const storedUser = JSON.parse(localStorage.getItem("user") || "null");
+        const userId = storedUser?.id_user;
+
+        if (!userId) {
+          setAppointments([]);
+          setError("");
+          setLoading(false);
+          return;
+        }
+
+        const [petsResult, appointmentsResult] = await Promise.allSettled([
+          api.get(`/pets/user/${userId}`),
+          api.get("/appointments")
+        ]);
+
+        const petsData = petsResult.status === "fulfilled" ? (petsResult.value.data || []) : [];
+        const appointmentsData = appointmentsResult.status === "fulfilled" ? (appointmentsResult.value.data || []) : [];
+        const petIds = petsData.map((pet) => pet.id_pet);
+        const visibleAppointments = appointmentsData.filter((appointment) => petIds.includes(appointment.id_pet));
 
         const enrichedAppointments = await Promise.all(
-          appointmentsData.map(async (appointment) => {
+          visibleAppointments.map(async (appointment) => {
             const [petResult, serviceResult, vetResult] = await Promise.allSettled([
               appointment.id_pet ? api.get(`/pets/${appointment.id_pet}`) : Promise.resolve({ status: "fulfilled", value: { data: null } }),
               appointment.id_service ? api.get(`/services/${appointment.id_service}`) : Promise.resolve({ status: "fulfilled", value: { data: null } }),
@@ -194,10 +212,25 @@ const Appointments = () => {
         customClass: swalCustomClass
       });
 
-      const response = await api.get("/appointments");
-      const appointmentsData = response.data || [];
+      const storedUser = JSON.parse(localStorage.getItem("user") || "null");
+      const userId = storedUser?.id_user;
+      if (!userId) {
+        setAppointments([]);
+        return;
+      }
+
+      const [petsResult, appointmentsResult] = await Promise.allSettled([
+        api.get(`/pets/user/${userId}`),
+        api.get("/appointments")
+      ]);
+
+      const petsData = petsResult.status === "fulfilled" ? (petsResult.value.data || []) : [];
+      const appointmentsData = appointmentsResult.status === "fulfilled" ? (appointmentsResult.value.data || []) : [];
+      const petIds = petsData.map((pet) => pet.id_pet);
+      const visibleAppointments = appointmentsData.filter((item) => petIds.includes(item.id_pet));
+
       const enrichedAppointments = await Promise.all(
-        appointmentsData.map(async (item) => {
+        visibleAppointments.map(async (item) => {
           const [petResult, serviceResult, vetResult] = await Promise.allSettled([
             item.id_pet ? api.get(`/pets/${item.id_pet}`) : Promise.resolve({ status: "fulfilled", value: { data: null } }),
             item.id_service ? api.get(`/services/${item.id_service}`) : Promise.resolve({ status: "fulfilled", value: { data: null } }),
